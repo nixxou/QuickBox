@@ -19,6 +19,7 @@ using System.Xml.Linq;
 using Unbroken.LaunchBox.Plugins;
 using Unbroken.LaunchBox.Plugins.Data;
 using Unbroken.LaunchBox.Plugins.RetroAchievements;
+using Vlc.DotNet.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace QuickBox
@@ -383,6 +384,16 @@ namespace QuickBox
 				selectedVideoPath = game.GetVideoPath();
 				selectedBackgroundPath = game.BackgroundImagePath;
 				selectedMainImage = game.Box3DImagePath;
+
+				lbl_developer.Text = "Developer : " + game.Developer;
+				lbl_publisher.Text = "Publisher : " + game.Publisher;
+				lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
+				lbl_genre.Text = "Genre : " + game.GenresString;
+				lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+				lbl_desc.Text = game.Notes;
+				label1.Text = game.Notes;
+				label2.Text = game.Notes;
+
 				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.FrontImagePath;
 				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.CartFrontImagePath;
 				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.Cart3DImagePath;
@@ -456,9 +467,89 @@ namespace QuickBox
 					pictureBox_gameImage.Image = null;
 				}
 			}
+			AddPictureBoxesToFlowLayoutPanel();
 
 			// Arrêtez le timer
 			imageLoadTimer.Stop();
+		}
+
+		private void AddPictureBoxesToFlowLayoutPanel()
+		{
+			// Supprimez tous les contrôles existants dans le FlowLayoutPanel
+			flowLayoutPanelThumbs.Controls.Clear();
+
+			// La marge entre chaque PictureBox
+			int spacing = 10;
+
+			// Pour chaque image dans votre tableau selectedImgList
+			foreach (ImageDetails imgDetails in selectedImgList)
+			{
+				if (string.IsNullOrEmpty(imgDetails.FilePath) || !File.Exists(imgDetails.FilePath)) continue;
+
+				Image ImageThumb = null;
+				try
+				{
+					Image originalImage = System.Drawing.Image.FromFile(imgDetails.FilePath);
+					ImageThumb = ResizeImageBest(originalImage, new Size(77, 77));
+				}
+				catch
+				{
+					continue;
+				}
+				if (ImageThumb == null) continue;
+
+				// Créez une nouvelle instance de PictureBox
+				PictureBox pictureBox = new PictureBox();
+
+				pictureBox.Anchor = AnchorStyles.Left;
+
+				// Définissez la taille de la PictureBox à 77x77 pixels
+				pictureBox.Size = new Size(77, 77);
+
+				// Assurez-vous que la taille de l'image est ajustée à la taille de la PictureBox
+				pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+
+				// Définissez l'image à afficher dans la PictureBox (imgDetails.Image représente votre image)
+				pictureBox.Image = ImageThumb;
+
+				// Ajoutez une fonction anonyme pour gérer le clic sur la PictureBox
+				pictureBox.Click += (sender, e) =>
+				{
+
+					if (vlcControl.Visible)
+					{
+						vlcControl.Stop();
+						vlcControl.Visible = false;
+					}
+
+					try
+					{
+						
+						Image originalImage = System.Drawing.Image.FromFile(imgDetails.FilePath);
+						pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+						pictureBox_gameImage.Visible = true;
+					}
+					catch
+					{
+						pictureBox_gameImage.Image = null;
+					}
+
+				};
+
+				// Ajoutez la PictureBox au FlowLayoutPanel
+				flowLayoutPanelThumbs.Controls.Add(pictureBox);
+
+				/*
+				// Définissez la marge entre les PictureBox
+				flowLayoutPanelThumbs.SetFlowBreak(pictureBox, true);
+
+				// Ajoutez un espacement horizontal entre les PictureBox
+				if (flowLayoutPanelThumbs.Controls.Count > 1)
+				{
+					pictureBox.Margin = new Padding(spacing, 0, 0, 0);
+				}
+				*/
+			}
 		}
 
 		private Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
@@ -835,6 +926,21 @@ namespace QuickBox
 		}
 
 		private void fake_textbox_TextChanged(object sender, EventArgs e)
+		{
+
+		}
+
+		private void label2_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void label5_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void panel3_Paint(object sender, PaintEventArgs e)
 		{
 
 		}
