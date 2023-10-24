@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,6 +21,7 @@ using Unbroken.LaunchBox.Plugins;
 using Unbroken.LaunchBox.Plugins.Data;
 using Unbroken.LaunchBox.Plugins.RetroAchievements;
 using Vlc.DotNet.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace QuickBox
@@ -57,9 +59,10 @@ namespace QuickBox
 
 		private bool launchboxHidden = false;
 		private Vlc.DotNet.Forms.VlcControl vlcControl = null;
+
 		public Form1()
 		{
-
+			
 			var rootPlatforms = PluginHelper.DataManager.GetRootPlatformsCategoriesPlaylists();
 			foreach(var p in rootPlatforms)
 			{
@@ -130,6 +133,116 @@ namespace QuickBox
 				if(preloadPlatformIcons.ContainsKey(p.Name)) return preloadPlatformIcons[p.Name];
 				return null;
 			};
+
+			this.olvColumn9.AspectToStringConverter = delegate (object x)
+			{
+				string path = (string)x;
+				string result = "";
+				if (!string.IsNullOrEmpty(path))
+				{
+					try
+					{
+						result = Path.GetFileName(path);
+					}
+					catch { }
+				}
+				return result;
+			};
+
+			this.olvColumn7.AspectToStringConverter = delegate (object x)
+			{
+				if (x != null)
+				{
+					DateTime dateTime = (DateTime)x;
+					return dateTime.ToShortDateString();
+				}
+				return string.Empty;
+			};
+
+			this.olvColumn17.AspectToStringConverter = delegate (object x)
+			{
+				if (x != null)
+				{
+					DateTime dateTime = (DateTime)x;
+					return dateTime.ToShortDateString();
+				}
+				return string.Empty;
+			};
+
+			this.olvColumn18.AspectToStringConverter = delegate (object x)
+			{
+				if (x != null)
+				{
+					DateTime dateTime = (DateTime)x;
+					return dateTime.ToShortDateString();
+				}
+				return string.Empty;
+			};
+
+			this.olvColumn20.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn21.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn22.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn23.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn24.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn29.AspectGetter = delegate (object x)
+			{
+				if (x == null) return "";
+				var game = (IGame)x;
+				string result = "";
+				foreach (IAlternateName name in game.GetAllAlternateNames())
+				{
+					result += name.Name + ", ";
+				}
+				result = result.Trim();
+				result = result.Trim(',');
+				result = result.Trim();
+				return result;
+			};
+
+			this.olvColumn34.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return (bool)x ? "Yes" : "No";
+			};
+
+			this.olvColumn36.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				TimeSpan temps = TimeSpan.FromSeconds((int)x);
+				return temps.ToString(@"hh\:mm\:ss");
+			};
+			this.olvColumn27.AspectToStringConverter = delegate (object x)
+			{
+				if (x == null) return "";
+				return Math.Round((System.Single)x, 2).ToString();
+			};
+			
+
 			contextMenuStrip1.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
 			this.fastObjectListView1.Activation = System.Windows.Forms.ItemActivation.Standard;
 			this.fastObjectListView1.HotTracking = false;
@@ -391,8 +504,6 @@ namespace QuickBox
 				lbl_genre.Text = "Genre : " + game.GenresString;
 				lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
 				lbl_desc.Text = game.Notes;
-				label1.Text = game.Notes;
-				label2.Text = game.Notes;
 
 				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.FrontImagePath;
 				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.CartFrontImagePath;
@@ -913,11 +1024,8 @@ namespace QuickBox
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-
-
-			vlcControl.SetMedia(new FileInfo(@"C:\Users\Mehdi\Videos\2023-08-05 16-22-57.mkv"));
-
-			vlcControl.Play();
+			var frm = new FormConfig();
+			frm.ShowDialog();
 		}
 
 		private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)

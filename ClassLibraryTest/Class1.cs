@@ -11,7 +11,7 @@ namespace QuickBox
 		{
 			if (eventType == "LaunchBoxStartupCompleted")
 			{
-				MessageBox.Show("start");
+				//MessageBox.Show("start");
 				var frm = new Form1();
 				frm.Show();
 

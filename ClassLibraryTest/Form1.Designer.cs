@@ -67,6 +67,34 @@
 			this.lbl_developer = new System.Windows.Forms.Label();
 			this.lbl_rlzdate = new System.Windows.Forms.Label();
 			this.lbl_desc = new System.Windows.Forms.Label();
+			this.olvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn10 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn11 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn13 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn14 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn15 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn16 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn17 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn18 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn19 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn20 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn21 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn22 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn23 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn24 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn25 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn26 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn27 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn28 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn29 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn30 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn31 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn32 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn33 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn34 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn35 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn36 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.contextMenuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.treeListView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).BeginInit();
@@ -118,10 +146,10 @@
 			// 
 			// button2
 			// 
-			this.button2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.button2.Location = new System.Drawing.Point(215, 3);
+			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.button2.Location = new System.Drawing.Point(287, 3);
 			this.button2.Name = "button2";
-			this.button2.Size = new System.Drawing.Size(117, 23);
+			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 7;
 			this.button2.Text = "Config";
 			this.button2.UseVisualStyleBackColor = true;
@@ -130,11 +158,11 @@
 			// button1
 			// 
 			this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.button1.Location = new System.Drawing.Point(40, 3);
+			this.button1.Location = new System.Drawing.Point(26, 3);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(102, 23);
+			this.button1.Size = new System.Drawing.Size(130, 23);
 			this.button1.TabIndex = 6;
-			this.button1.Text = "Show Launchbox";
+			this.button1.Text = "Show/Hide Launchbox";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click_1);
 			// 
@@ -175,13 +203,43 @@
 			// 
 			// fastObjectListView1
 			// 
+			this.fastObjectListView1.Activation = System.Windows.Forms.ItemActivation.TwoClick;
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn1);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn2);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn3);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn5);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn6);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn9);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn7);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn25);
 			this.fastObjectListView1.AllColumns.Add(this.olvColumn8);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn10);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn11);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn12);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn13);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn14);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn15);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn16);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn17);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn18);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn19);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn20);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn21);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn22);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn23);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn24);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn26);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn27);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn28);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn29);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn30);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn31);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn32);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn33);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn34);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn35);
+			this.fastObjectListView1.AllColumns.Add(this.olvColumn36);
+			this.fastObjectListView1.AllowColumnReorder = true;
 			this.fastObjectListView1.CellEditUseWholeCell = false;
 			this.fastObjectListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumn1,
@@ -189,8 +247,36 @@
             this.olvColumn3,
             this.olvColumn5,
             this.olvColumn6,
+            this.olvColumn9,
             this.olvColumn7,
-            this.olvColumn8});
+            this.olvColumn25,
+            this.olvColumn8,
+            this.olvColumn10,
+            this.olvColumn11,
+            this.olvColumn12,
+            this.olvColumn13,
+            this.olvColumn14,
+            this.olvColumn15,
+            this.olvColumn16,
+            this.olvColumn17,
+            this.olvColumn18,
+            this.olvColumn19,
+            this.olvColumn20,
+            this.olvColumn21,
+            this.olvColumn22,
+            this.olvColumn23,
+            this.olvColumn24,
+            this.olvColumn26,
+            this.olvColumn27,
+            this.olvColumn28,
+            this.olvColumn29,
+            this.olvColumn30,
+            this.olvColumn31,
+            this.olvColumn32,
+            this.olvColumn33,
+            this.olvColumn34,
+            this.olvColumn35,
+            this.olvColumn36});
 			this.fastObjectListView1.ContextMenuStrip = this.contextMenuStrip1;
 			this.fastObjectListView1.Cursor = System.Windows.Forms.Cursors.Default;
 			this.fastObjectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -205,6 +291,7 @@
 			this.fastObjectListView1.UseCompatibleStateImageBehavior = false;
 			this.fastObjectListView1.UseFilterIndicator = true;
 			this.fastObjectListView1.UseFiltering = true;
+			this.fastObjectListView1.UseHyperlinks = true;
 			this.fastObjectListView1.View = System.Windows.Forms.View.Details;
 			this.fastObjectListView1.VirtualMode = true;
 			this.fastObjectListView1.SelectedIndexChanged += new System.EventHandler(this.fastObjectListView1_SelectedIndexChanged);
@@ -474,6 +561,143 @@
 			this.lbl_desc.TabIndex = 15;
 			this.lbl_desc.Text = "xxxx";
 			// 
+			// olvColumn9
+			// 
+			this.olvColumn9.AspectName = "ApplicationPath";
+			this.olvColumn9.Text = "ApplicationFile";
+			// 
+			// olvColumn10
+			// 
+			this.olvColumn10.AspectName = "GenresString";
+			this.olvColumn10.Text = "Genres";
+			// 
+			// olvColumn11
+			// 
+			this.olvColumn11.AspectName = "Series";
+			this.olvColumn11.Text = "Series";
+			// 
+			// olvColumn12
+			// 
+			this.olvColumn12.AspectName = "Region";
+			this.olvColumn12.Text = "Region";
+			// 
+			// olvColumn13
+			// 
+			this.olvColumn13.AspectName = "PlayMode";
+			this.olvColumn13.Text = "Play Mode";
+			// 
+			// olvColumn14
+			// 
+			this.olvColumn14.AspectName = "Version";
+			this.olvColumn14.Text = "Version";
+			// 
+			// olvColumn15
+			// 
+			this.olvColumn15.AspectName = "Status";
+			this.olvColumn15.Text = "Status";
+			// 
+			// olvColumn16
+			// 
+			this.olvColumn16.AspectName = "Source";
+			this.olvColumn16.Text = "Source";
+			// 
+			// olvColumn17
+			// 
+			this.olvColumn17.AspectName = "DateAdded";
+			this.olvColumn17.Text = "Date Added";
+			// 
+			// olvColumn18
+			// 
+			this.olvColumn18.AspectName = "DateModified";
+			this.olvColumn18.Text = "Date Modified";
+			// 
+			// olvColumn19
+			// 
+			this.olvColumn19.AspectName = "PlayCount";
+			this.olvColumn19.Text = "Play Count";
+			// 
+			// olvColumn20
+			// 
+			this.olvColumn20.AspectName = "Favorite";
+			this.olvColumn20.Text = "Favorite";
+			// 
+			// olvColumn21
+			// 
+			this.olvColumn21.AspectName = "Completed";
+			this.olvColumn21.Text = "Completed";
+			// 
+			// olvColumn22
+			// 
+			this.olvColumn22.AspectName = "Broken";
+			this.olvColumn22.Text = "Broken";
+			// 
+			// olvColumn23
+			// 
+			this.olvColumn23.AspectName = "Portable";
+			this.olvColumn23.Text = "Portable";
+			// 
+			// olvColumn24
+			// 
+			this.olvColumn24.AspectName = "Hide";
+			this.olvColumn24.Text = "Hide";
+			// 
+			// olvColumn25
+			// 
+			this.olvColumn25.AspectName = "ReleaseDate";
+			this.olvColumn25.Text = "Release Year";
+			// 
+			// olvColumn26
+			// 
+			this.olvColumn26.AspectName = "StarRating";
+			this.olvColumn26.Text = "Star Rating";
+			// 
+			// olvColumn27
+			// 
+			this.olvColumn27.AspectName = "CommunityStarRating";
+			this.olvColumn27.Text = "Community Star Rating";
+			// 
+			// olvColumn28
+			// 
+			this.olvColumn28.AspectName = "CommunityStarRatingTotalVotes";
+			this.olvColumn28.Text = "Community Star Rating Count";
+			// 
+			// olvColumn30
+			// 
+			this.olvColumn30.AspectName = "WikipediaUrl";
+			this.olvColumn30.Hyperlink = true;
+			this.olvColumn30.Text = "Wikipedia Url";
+			// 
+			// olvColumn31
+			// 
+			this.olvColumn31.AspectName = "MaxPlayers";
+			this.olvColumn31.Text = "Max Players";
+			// 
+			// olvColumn32
+			// 
+			this.olvColumn32.AspectName = "ReleaseType";
+			this.olvColumn32.Text = "Release Type";
+			// 
+			// olvColumn33
+			// 
+			this.olvColumn33.AspectName = "VideoUrl";
+			this.olvColumn33.Hyperlink = true;
+			this.olvColumn33.Text = "Video Url";
+			// 
+			// olvColumn34
+			// 
+			this.olvColumn34.AspectName = "Installed";
+			this.olvColumn34.Text = "Installed";
+			// 
+			// olvColumn35
+			// 
+			this.olvColumn35.AspectName = "LaunchBoxDbId";
+			this.olvColumn35.Text = "LaunchBoxDbId";
+			// 
+			// olvColumn36
+			// 
+			this.olvColumn36.AspectName = "PlayTime";
+			this.olvColumn36.Text = "PlayTime";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -544,5 +768,33 @@
 		private System.Windows.Forms.Label lbl_developer;
 		private System.Windows.Forms.Label lbl_rlzdate;
 		private System.Windows.Forms.Label lbl_desc;
+		private BrightIdeasSoftware.OLVColumn olvColumn9;
+		private BrightIdeasSoftware.OLVColumn olvColumn10;
+		private BrightIdeasSoftware.OLVColumn olvColumn11;
+		private BrightIdeasSoftware.OLVColumn olvColumn12;
+		private BrightIdeasSoftware.OLVColumn olvColumn13;
+		private BrightIdeasSoftware.OLVColumn olvColumn14;
+		private BrightIdeasSoftware.OLVColumn olvColumn15;
+		private BrightIdeasSoftware.OLVColumn olvColumn16;
+		private BrightIdeasSoftware.OLVColumn olvColumn17;
+		private BrightIdeasSoftware.OLVColumn olvColumn18;
+		private BrightIdeasSoftware.OLVColumn olvColumn19;
+		private BrightIdeasSoftware.OLVColumn olvColumn20;
+		private BrightIdeasSoftware.OLVColumn olvColumn21;
+		private BrightIdeasSoftware.OLVColumn olvColumn22;
+		private BrightIdeasSoftware.OLVColumn olvColumn23;
+		private BrightIdeasSoftware.OLVColumn olvColumn24;
+		private BrightIdeasSoftware.OLVColumn olvColumn25;
+		private BrightIdeasSoftware.OLVColumn olvColumn26;
+		private BrightIdeasSoftware.OLVColumn olvColumn27;
+		private BrightIdeasSoftware.OLVColumn olvColumn28;
+		private BrightIdeasSoftware.OLVColumn olvColumn29;
+		private BrightIdeasSoftware.OLVColumn olvColumn30;
+		private BrightIdeasSoftware.OLVColumn olvColumn31;
+		private BrightIdeasSoftware.OLVColumn olvColumn32;
+		private BrightIdeasSoftware.OLVColumn olvColumn33;
+		private BrightIdeasSoftware.OLVColumn olvColumn34;
+		private BrightIdeasSoftware.OLVColumn olvColumn35;
+		private BrightIdeasSoftware.OLVColumn olvColumn36;
 	}
 }
