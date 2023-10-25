@@ -47,8 +47,36 @@
 			this.olvColumn3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn6 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn7 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn25 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.olvColumn8 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn10 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn11 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn13 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn14 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn15 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn16 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn17 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn18 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn19 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn20 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn21 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn22 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn23 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn24 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn26 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn27 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn28 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn29 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn30 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn31 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn32 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn33 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn34 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn35 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumn36 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -67,34 +95,6 @@
 			this.lbl_developer = new System.Windows.Forms.Label();
 			this.lbl_rlzdate = new System.Windows.Forms.Label();
 			this.lbl_desc = new System.Windows.Forms.Label();
-			this.olvColumn9 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn10 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn11 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn12 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn13 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn14 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn15 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn16 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn17 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn18 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn19 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn20 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn21 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn22 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn23 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn24 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn25 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn26 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn27 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn28 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn29 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn30 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn31 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn32 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn33 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn34 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn35 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-			this.olvColumn36 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.contextMenuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.treeListView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).BeginInit();
@@ -147,7 +147,7 @@
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(287, 3);
+			this.button2.Location = new System.Drawing.Point(290, 3);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 7;
@@ -158,7 +158,7 @@
 			// button1
 			// 
 			this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.button1.Location = new System.Drawing.Point(26, 3);
+			this.button1.Location = new System.Drawing.Point(27, 3);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(130, 23);
 			this.button1.TabIndex = 6;
@@ -195,6 +195,7 @@
 			this.treeListView1.View = System.Windows.Forms.View.Details;
 			this.treeListView1.VirtualMode = true;
 			this.treeListView1.SelectedIndexChanged += new System.EventHandler(this.treeListView1_SelectedIndexChanged);
+			this.treeListView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.treeListView1_MouseDoubleClick);
 			// 
 			// olvColumn4
 			// 
@@ -246,37 +247,11 @@
             this.olvColumn2,
             this.olvColumn3,
             this.olvColumn5,
-            this.olvColumn6,
             this.olvColumn9,
-            this.olvColumn7,
             this.olvColumn25,
-            this.olvColumn8,
             this.olvColumn10,
-            this.olvColumn11,
-            this.olvColumn12,
-            this.olvColumn13,
-            this.olvColumn14,
-            this.olvColumn15,
-            this.olvColumn16,
-            this.olvColumn17,
-            this.olvColumn18,
-            this.olvColumn19,
-            this.olvColumn20,
-            this.olvColumn21,
-            this.olvColumn22,
-            this.olvColumn23,
-            this.olvColumn24,
             this.olvColumn26,
-            this.olvColumn27,
-            this.olvColumn28,
-            this.olvColumn29,
-            this.olvColumn30,
-            this.olvColumn31,
-            this.olvColumn32,
-            this.olvColumn33,
-            this.olvColumn34,
-            this.olvColumn35,
-            this.olvColumn36});
+            this.olvColumn27});
 			this.fastObjectListView1.ContextMenuStrip = this.contextMenuStrip1;
 			this.fastObjectListView1.Cursor = System.Windows.Forms.Cursors.Default;
 			this.fastObjectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -286,12 +261,11 @@
 			this.fastObjectListView1.MultiSelect = false;
 			this.fastObjectListView1.Name = "fastObjectListView1";
 			this.fastObjectListView1.ShowGroups = false;
-			this.fastObjectListView1.Size = new System.Drawing.Size(901, 976);
+			this.fastObjectListView1.Size = new System.Drawing.Size(898, 976);
 			this.fastObjectListView1.TabIndex = 8;
 			this.fastObjectListView1.UseCompatibleStateImageBehavior = false;
 			this.fastObjectListView1.UseFilterIndicator = true;
 			this.fastObjectListView1.UseFiltering = true;
-			this.fastObjectListView1.UseHyperlinks = true;
 			this.fastObjectListView1.View = System.Windows.Forms.View.Details;
 			this.fastObjectListView1.VirtualMode = true;
 			this.fastObjectListView1.SelectedIndexChanged += new System.EventHandler(this.fastObjectListView1_SelectedIndexChanged);
@@ -323,25 +297,218 @@
 			// olvColumn6
 			// 
 			this.olvColumn6.AspectName = "ApplicationPath";
+			this.olvColumn6.DisplayIndex = 4;
+			this.olvColumn6.IsVisible = false;
 			this.olvColumn6.Text = "ApplicationPath";
 			this.olvColumn6.Width = 250;
+			// 
+			// olvColumn9
+			// 
+			this.olvColumn9.AspectName = "ApplicationPath";
+			this.olvColumn9.Text = "ApplicationFile";
 			// 
 			// olvColumn7
 			// 
 			this.olvColumn7.AspectName = "ReleaseDate";
+			this.olvColumn7.DisplayIndex = 5;
+			this.olvColumn7.IsVisible = false;
 			this.olvColumn7.Text = "ReleaseDate";
+			// 
+			// olvColumn25
+			// 
+			this.olvColumn25.AspectName = "ReleaseYear";
+			this.olvColumn25.Text = "Release Year";
 			// 
 			// olvColumn8
 			// 
 			this.olvColumn8.AspectName = "Rating";
+			this.olvColumn8.DisplayIndex = 7;
+			this.olvColumn8.IsVisible = false;
 			this.olvColumn8.Text = "Rating";
+			// 
+			// olvColumn10
+			// 
+			this.olvColumn10.AspectName = "GenresString";
+			this.olvColumn10.Text = "Genres";
+			// 
+			// olvColumn11
+			// 
+			this.olvColumn11.AspectName = "Series";
+			this.olvColumn11.DisplayIndex = 9;
+			this.olvColumn11.IsVisible = false;
+			this.olvColumn11.Text = "Series";
+			// 
+			// olvColumn12
+			// 
+			this.olvColumn12.AspectName = "Region";
+			this.olvColumn12.DisplayIndex = 10;
+			this.olvColumn12.IsVisible = false;
+			this.olvColumn12.Text = "Region";
+			// 
+			// olvColumn13
+			// 
+			this.olvColumn13.AspectName = "PlayMode";
+			this.olvColumn13.DisplayIndex = 11;
+			this.olvColumn13.IsVisible = false;
+			this.olvColumn13.Text = "Play Mode";
+			// 
+			// olvColumn14
+			// 
+			this.olvColumn14.AspectName = "Version";
+			this.olvColumn14.DisplayIndex = 12;
+			this.olvColumn14.IsVisible = false;
+			this.olvColumn14.Text = "Version";
+			// 
+			// olvColumn15
+			// 
+			this.olvColumn15.AspectName = "Status";
+			this.olvColumn15.DisplayIndex = 13;
+			this.olvColumn15.IsVisible = false;
+			this.olvColumn15.Text = "Status";
+			// 
+			// olvColumn16
+			// 
+			this.olvColumn16.AspectName = "Source";
+			this.olvColumn16.DisplayIndex = 14;
+			this.olvColumn16.IsVisible = false;
+			this.olvColumn16.Text = "Source";
+			// 
+			// olvColumn17
+			// 
+			this.olvColumn17.AspectName = "DateAdded";
+			this.olvColumn17.DisplayIndex = 15;
+			this.olvColumn17.IsVisible = false;
+			this.olvColumn17.Text = "Date Added";
+			// 
+			// olvColumn18
+			// 
+			this.olvColumn18.AspectName = "DateModified";
+			this.olvColumn18.DisplayIndex = 16;
+			this.olvColumn18.IsVisible = false;
+			this.olvColumn18.Text = "Date Modified";
+			// 
+			// olvColumn19
+			// 
+			this.olvColumn19.AspectName = "PlayCount";
+			this.olvColumn19.DisplayIndex = 17;
+			this.olvColumn19.IsVisible = false;
+			this.olvColumn19.Text = "Play Count";
+			// 
+			// olvColumn20
+			// 
+			this.olvColumn20.AspectName = "Favorite";
+			this.olvColumn20.DisplayIndex = 18;
+			this.olvColumn20.IsVisible = false;
+			this.olvColumn20.Text = "Favorite";
+			// 
+			// olvColumn21
+			// 
+			this.olvColumn21.AspectName = "Completed";
+			this.olvColumn21.DisplayIndex = 19;
+			this.olvColumn21.IsVisible = false;
+			this.olvColumn21.Text = "Completed";
+			// 
+			// olvColumn22
+			// 
+			this.olvColumn22.AspectName = "Broken";
+			this.olvColumn22.DisplayIndex = 20;
+			this.olvColumn22.IsVisible = false;
+			this.olvColumn22.Text = "Broken";
+			// 
+			// olvColumn23
+			// 
+			this.olvColumn23.AspectName = "Portable";
+			this.olvColumn23.DisplayIndex = 21;
+			this.olvColumn23.IsVisible = false;
+			this.olvColumn23.Text = "Portable";
+			// 
+			// olvColumn24
+			// 
+			this.olvColumn24.AspectName = "Hide";
+			this.olvColumn24.DisplayIndex = 22;
+			this.olvColumn24.IsVisible = false;
+			this.olvColumn24.Text = "Hide";
+			// 
+			// olvColumn26
+			// 
+			this.olvColumn26.AspectName = "StarRating";
+			this.olvColumn26.Text = "Star Rating";
+			// 
+			// olvColumn27
+			// 
+			this.olvColumn27.AspectName = "CommunityStarRating";
+			this.olvColumn27.Text = "Community Star Rating";
+			// 
+			// olvColumn28
+			// 
+			this.olvColumn28.AspectName = "CommunityStarRatingTotalVotes";
+			this.olvColumn28.DisplayIndex = 25;
+			this.olvColumn28.IsVisible = false;
+			this.olvColumn28.Text = "Community Star Rating Count";
+			// 
+			// olvColumn29
+			// 
+			this.olvColumn29.DisplayIndex = 9;
+			this.olvColumn29.IsVisible = false;
+			this.olvColumn29.Text = "Alt Names";
+			// 
+			// olvColumn30
+			// 
+			this.olvColumn30.AspectName = "WikipediaUrl";
+			this.olvColumn30.DisplayIndex = 27;
+			this.olvColumn30.Hyperlink = true;
+			this.olvColumn30.IsVisible = false;
+			this.olvColumn30.Text = "Wikipedia Url";
+			// 
+			// olvColumn31
+			// 
+			this.olvColumn31.AspectName = "MaxPlayers";
+			this.olvColumn31.DisplayIndex = 28;
+			this.olvColumn31.IsVisible = false;
+			this.olvColumn31.Text = "Max Players";
+			// 
+			// olvColumn32
+			// 
+			this.olvColumn32.AspectName = "ReleaseType";
+			this.olvColumn32.DisplayIndex = 29;
+			this.olvColumn32.IsVisible = false;
+			this.olvColumn32.Text = "Release Type";
+			// 
+			// olvColumn33
+			// 
+			this.olvColumn33.AspectName = "VideoUrl";
+			this.olvColumn33.DisplayIndex = 30;
+			this.olvColumn33.Hyperlink = true;
+			this.olvColumn33.IsVisible = false;
+			this.olvColumn33.Text = "Video Url";
+			// 
+			// olvColumn34
+			// 
+			this.olvColumn34.AspectName = "Installed";
+			this.olvColumn34.DisplayIndex = 31;
+			this.olvColumn34.IsVisible = false;
+			this.olvColumn34.Text = "Installed";
+			// 
+			// olvColumn35
+			// 
+			this.olvColumn35.AspectName = "LaunchBoxDbId";
+			this.olvColumn35.DisplayIndex = 32;
+			this.olvColumn35.IsVisible = false;
+			this.olvColumn35.Text = "LaunchBoxDbId";
+			// 
+			// olvColumn36
+			// 
+			this.olvColumn36.AspectName = "PlayTime";
+			this.olvColumn36.DisplayIndex = 33;
+			this.olvColumn36.IsVisible = false;
+			this.olvColumn36.Text = "PlayTime";
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 370F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 374F));
 			this.tableLayoutPanel1.Controls.Add(this.treeListView1, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 0);
@@ -365,12 +532,12 @@
 			this.tableLayoutPanel3.Controls.Add(this.button1, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.button2, 1, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(1136, 3);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(1133, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(365, 34);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(368, 34);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// flowLayoutPanel1
@@ -385,10 +552,10 @@
 			this.flowLayoutPanel1.Controls.Add(this.lbl_desc);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(1136, 43);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(1133, 43);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(365, 976);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(368, 976);
 			this.flowLayoutPanel1.TabIndex = 9;
 			this.flowLayoutPanel1.WrapContents = false;
 			// 
@@ -560,143 +727,6 @@
 			this.lbl_desc.Size = new System.Drawing.Size(320, 18);
 			this.lbl_desc.TabIndex = 15;
 			this.lbl_desc.Text = "xxxx";
-			// 
-			// olvColumn9
-			// 
-			this.olvColumn9.AspectName = "ApplicationPath";
-			this.olvColumn9.Text = "ApplicationFile";
-			// 
-			// olvColumn10
-			// 
-			this.olvColumn10.AspectName = "GenresString";
-			this.olvColumn10.Text = "Genres";
-			// 
-			// olvColumn11
-			// 
-			this.olvColumn11.AspectName = "Series";
-			this.olvColumn11.Text = "Series";
-			// 
-			// olvColumn12
-			// 
-			this.olvColumn12.AspectName = "Region";
-			this.olvColumn12.Text = "Region";
-			// 
-			// olvColumn13
-			// 
-			this.olvColumn13.AspectName = "PlayMode";
-			this.olvColumn13.Text = "Play Mode";
-			// 
-			// olvColumn14
-			// 
-			this.olvColumn14.AspectName = "Version";
-			this.olvColumn14.Text = "Version";
-			// 
-			// olvColumn15
-			// 
-			this.olvColumn15.AspectName = "Status";
-			this.olvColumn15.Text = "Status";
-			// 
-			// olvColumn16
-			// 
-			this.olvColumn16.AspectName = "Source";
-			this.olvColumn16.Text = "Source";
-			// 
-			// olvColumn17
-			// 
-			this.olvColumn17.AspectName = "DateAdded";
-			this.olvColumn17.Text = "Date Added";
-			// 
-			// olvColumn18
-			// 
-			this.olvColumn18.AspectName = "DateModified";
-			this.olvColumn18.Text = "Date Modified";
-			// 
-			// olvColumn19
-			// 
-			this.olvColumn19.AspectName = "PlayCount";
-			this.olvColumn19.Text = "Play Count";
-			// 
-			// olvColumn20
-			// 
-			this.olvColumn20.AspectName = "Favorite";
-			this.olvColumn20.Text = "Favorite";
-			// 
-			// olvColumn21
-			// 
-			this.olvColumn21.AspectName = "Completed";
-			this.olvColumn21.Text = "Completed";
-			// 
-			// olvColumn22
-			// 
-			this.olvColumn22.AspectName = "Broken";
-			this.olvColumn22.Text = "Broken";
-			// 
-			// olvColumn23
-			// 
-			this.olvColumn23.AspectName = "Portable";
-			this.olvColumn23.Text = "Portable";
-			// 
-			// olvColumn24
-			// 
-			this.olvColumn24.AspectName = "Hide";
-			this.olvColumn24.Text = "Hide";
-			// 
-			// olvColumn25
-			// 
-			this.olvColumn25.AspectName = "ReleaseDate";
-			this.olvColumn25.Text = "Release Year";
-			// 
-			// olvColumn26
-			// 
-			this.olvColumn26.AspectName = "StarRating";
-			this.olvColumn26.Text = "Star Rating";
-			// 
-			// olvColumn27
-			// 
-			this.olvColumn27.AspectName = "CommunityStarRating";
-			this.olvColumn27.Text = "Community Star Rating";
-			// 
-			// olvColumn28
-			// 
-			this.olvColumn28.AspectName = "CommunityStarRatingTotalVotes";
-			this.olvColumn28.Text = "Community Star Rating Count";
-			// 
-			// olvColumn30
-			// 
-			this.olvColumn30.AspectName = "WikipediaUrl";
-			this.olvColumn30.Hyperlink = true;
-			this.olvColumn30.Text = "Wikipedia Url";
-			// 
-			// olvColumn31
-			// 
-			this.olvColumn31.AspectName = "MaxPlayers";
-			this.olvColumn31.Text = "Max Players";
-			// 
-			// olvColumn32
-			// 
-			this.olvColumn32.AspectName = "ReleaseType";
-			this.olvColumn32.Text = "Release Type";
-			// 
-			// olvColumn33
-			// 
-			this.olvColumn33.AspectName = "VideoUrl";
-			this.olvColumn33.Hyperlink = true;
-			this.olvColumn33.Text = "Video Url";
-			// 
-			// olvColumn34
-			// 
-			this.olvColumn34.AspectName = "Installed";
-			this.olvColumn34.Text = "Installed";
-			// 
-			// olvColumn35
-			// 
-			this.olvColumn35.AspectName = "LaunchBoxDbId";
-			this.olvColumn35.Text = "LaunchBoxDbId";
-			// 
-			// olvColumn36
-			// 
-			this.olvColumn36.AspectName = "PlayTime";
-			this.olvColumn36.Text = "PlayTime";
 			// 
 			// Form1
 			// 

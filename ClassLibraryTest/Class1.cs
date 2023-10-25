@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using Unbroken.LaunchBox.Plugins;
 
 namespace QuickBox
@@ -11,11 +13,14 @@ namespace QuickBox
 		{
 			if (eventType == "LaunchBoxStartupCompleted")
 			{
-				//MessageBox.Show("start");
+				MessageBox.Show("start");
 				var frm = new Form1();
 				frm.Show();
 
 			}
+			
+
+
 		}
 
 		private void LaunchForm()

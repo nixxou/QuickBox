@@ -28,50 +28,163 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.chk_EnableOnStart = new System.Windows.Forms.CheckBox();
-			this.trackBar1 = new System.Windows.Forms.TrackBar();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+			this.chk_onLaunch = new System.Windows.Forms.CheckBox();
+			this.trk_volumeVideo = new System.Windows.Forms.TrackBar();
+			this.chk_showVideo = new System.Windows.Forms.CheckBox();
+			this.chk_speeedUpDecompress = new System.Windows.Forms.CheckBox();
+			this.num_tailleCache = new System.Windows.Forms.NumericUpDown();
+			this.num_delayShow = new System.Windows.Forms.NumericUpDown();
+			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.chk_instantShow = new System.Windows.Forms.CheckBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.button1 = new System.Windows.Forms.Button();
+			((System.ComponentModel.ISupportInitialize)(this.trk_volumeVideo)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.num_tailleCache)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.num_delayShow)).BeginInit();
 			this.SuspendLayout();
 			// 
-			// chk_EnableOnStart
+			// chk_onLaunch
 			// 
-			this.chk_EnableOnStart.AutoSize = true;
-			this.chk_EnableOnStart.Location = new System.Drawing.Point(12, 12);
-			this.chk_EnableOnStart.Name = "chk_EnableOnStart";
-			this.chk_EnableOnStart.Size = new System.Drawing.Size(156, 17);
-			this.chk_EnableOnStart.TabIndex = 0;
-			this.chk_EnableOnStart.Text = "Show QuickBox on Launch";
-			this.chk_EnableOnStart.UseVisualStyleBackColor = true;
+			this.chk_onLaunch.AutoSize = true;
+			this.chk_onLaunch.Location = new System.Drawing.Point(12, 12);
+			this.chk_onLaunch.Name = "chk_onLaunch";
+			this.chk_onLaunch.Size = new System.Drawing.Size(156, 17);
+			this.chk_onLaunch.TabIndex = 0;
+			this.chk_onLaunch.Text = "Show QuickBox on Launch";
+			this.chk_onLaunch.UseVisualStyleBackColor = true;
 			// 
-			// trackBar1
+			// trk_volumeVideo
 			// 
-			this.trackBar1.Location = new System.Drawing.Point(12, 58);
-			this.trackBar1.Name = "trackBar1";
-			this.trackBar1.Size = new System.Drawing.Size(293, 45);
-			this.trackBar1.TabIndex = 1;
+			this.trk_volumeVideo.Location = new System.Drawing.Point(90, 93);
+			this.trk_volumeVideo.Maximum = 100;
+			this.trk_volumeVideo.Name = "trk_volumeVideo";
+			this.trk_volumeVideo.Size = new System.Drawing.Size(293, 45);
+			this.trk_volumeVideo.TabIndex = 1;
 			// 
-			// checkBox1
+			// chk_showVideo
 			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Location = new System.Drawing.Point(12, 35);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(81, 17);
-			this.checkBox1.TabIndex = 2;
-			this.checkBox1.Text = "Play Videos";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.chk_showVideo.AutoSize = true;
+			this.chk_showVideo.Location = new System.Drawing.Point(12, 35);
+			this.chk_showVideo.Name = "chk_showVideo";
+			this.chk_showVideo.Size = new System.Drawing.Size(83, 17);
+			this.chk_showVideo.TabIndex = 2;
+			this.chk_showVideo.Text = "Show Video";
+			this.chk_showVideo.UseVisualStyleBackColor = true;
+			// 
+			// chk_speeedUpDecompress
+			// 
+			this.chk_speeedUpDecompress.AutoSize = true;
+			this.chk_speeedUpDecompress.Location = new System.Drawing.Point(12, 58);
+			this.chk_speeedUpDecompress.Name = "chk_speeedUpDecompress";
+			this.chk_speeedUpDecompress.Size = new System.Drawing.Size(189, 17);
+			this.chk_speeedUpDecompress.TabIndex = 3;
+			this.chk_speeedUpDecompress.Text = "Speed Up Lanchbox Auto-Backup";
+			this.chk_speeedUpDecompress.UseVisualStyleBackColor = true;
+			// 
+			// num_tailleCache
+			// 
+			this.num_tailleCache.Location = new System.Drawing.Point(118, 144);
+			this.num_tailleCache.Name = "num_tailleCache";
+			this.num_tailleCache.Size = new System.Drawing.Size(120, 20);
+			this.num_tailleCache.TabIndex = 4;
+			// 
+			// num_delayShow
+			// 
+			this.num_delayShow.Increment = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			this.num_delayShow.Location = new System.Drawing.Point(118, 170);
+			this.num_delayShow.Maximum = new decimal(new int[] {
+            2000,
+            0,
+            0,
+            0});
+			this.num_delayShow.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			this.num_delayShow.Name = "num_delayShow";
+			this.num_delayShow.Size = new System.Drawing.Size(120, 20);
+			this.num_delayShow.TabIndex = 5;
+			this.num_delayShow.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(12, 151);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(77, 13);
+			this.label1.TabIndex = 6;
+			this.label1.Text = "PreCache Size";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(9, 177);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(71, 13);
+			this.label2.TabIndex = 7;
+			this.label2.Text = "Delay Display";
+			// 
+			// chk_instantShow
+			// 
+			this.chk_instantShow.AutoSize = true;
+			this.chk_instantShow.Location = new System.Drawing.Point(12, 207);
+			this.chk_instantShow.Name = "chk_instantShow";
+			this.chk_instantShow.Size = new System.Drawing.Size(111, 17);
+			this.chk_instantShow.TabIndex = 8;
+			this.chk_instantShow.Text = "Show Text instant";
+			this.chk_instantShow.UseVisualStyleBackColor = true;
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(12, 93);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(72, 13);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "Video Volume";
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(435, 248);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75, 23);
+			this.button1.TabIndex = 10;
+			this.button1.Text = "Save";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// FormConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(317, 227);
-			this.Controls.Add(this.checkBox1);
-			this.Controls.Add(this.trackBar1);
-			this.Controls.Add(this.chk_EnableOnStart);
+			this.ClientSize = new System.Drawing.Size(522, 283);
+			this.Controls.Add(this.button1);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.chk_instantShow);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.num_delayShow);
+			this.Controls.Add(this.num_tailleCache);
+			this.Controls.Add(this.chk_speeedUpDecompress);
+			this.Controls.Add(this.chk_showVideo);
+			this.Controls.Add(this.trk_volumeVideo);
+			this.Controls.Add(this.chk_onLaunch);
 			this.Name = "FormConfig";
 			this.Text = "FormConfig";
-			((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+			this.Load += new System.EventHandler(this.FormConfig_Load);
+			((System.ComponentModel.ISupportInitialize)(this.trk_volumeVideo)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.num_tailleCache)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.num_delayShow)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -79,8 +192,16 @@
 
 		#endregion
 
-		private System.Windows.Forms.CheckBox chk_EnableOnStart;
-		private System.Windows.Forms.TrackBar trackBar1;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox chk_onLaunch;
+		private System.Windows.Forms.TrackBar trk_volumeVideo;
+		private System.Windows.Forms.CheckBox chk_showVideo;
+		private System.Windows.Forms.CheckBox chk_speeedUpDecompress;
+		private System.Windows.Forms.NumericUpDown num_tailleCache;
+		private System.Windows.Forms.NumericUpDown num_delayShow;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckBox chk_instantShow;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button button1;
 	}
 }

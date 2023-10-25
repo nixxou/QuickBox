@@ -51,18 +51,32 @@ namespace QuickBox
 		private Dictionary<string, Image> preloadPlatformIcons = new Dictionary<string, Image>();
 
 		private Timer imageLoadTimer = new Timer();
+		private IGame selectedGame = null;
+		private int selectedIndex = -1;
+		/*
 		private string selectedClearLogoPath = "";
 		private string selectedVideoPath = "";
 		private string selectedBackgroundPath = "";
 		private string selectedMainImage = "";
 		private ImageDetails[] selectedImgList = null;
+		*/
+
+		private Dictionary<int,CacheImg> cache = new Dictionary<int,CacheImg>();
+		private bool isGeneratingCache = false;
+		bool forceCacheReset = false;
 
 		private bool launchboxHidden = false;
 		private Vlc.DotNet.Forms.VlcControl vlcControl = null;
 
+		private bool tempLoad = false;
+
+		private Image LoadingImg;
+
+
 		public Form1()
 		{
-			
+
+			Config.LoadConfig();
 			var rootPlatforms = PluginHelper.DataManager.GetRootPlatformsCategoriesPlaylists();
 			foreach(var p in rootPlatforms)
 			{
@@ -73,6 +87,8 @@ namespace QuickBox
 
 
 			InitializeComponent();
+			ClearDisplay();
+			LoadingImg = GenerateLogo("", "", "Loading...", pictureBox1.Size);
 			var libDirectory = new DirectoryInfo(@"I:\LaunchBox\Core\ThirdParty\VLC\x64");
 
 			var options = new string[]
@@ -84,6 +100,8 @@ namespace QuickBox
 			vlcControl = new Vlc.DotNet.Forms.VlcControl();
 			vlcControl.BeginInit();
 			vlcControl.VlcLibDirectory = new DirectoryInfo(@"I:\LaunchBox\Core\ThirdParty\VLC\x64");
+			vlcControl.VlcMediaplayerOptions = new string[] { "--aout=directsound" };
+
 			vlcControl.Location = pictureBox_gameImage.Location;
 			vlcControl.Size = pictureBox_gameImage.Size;
 			pictureBox_gameImage.Parent.Controls.Add(vlcControl);
@@ -95,7 +113,7 @@ namespace QuickBox
 
 			InitializeListView();
 			this.MinimumSize = this.Size;
-			imageLoadTimer.Interval = 100;
+			imageLoadTimer.Interval = Config.delayShow;
 			imageLoadTimer.Tick += ImageLoadTimer_Tick;
 
 			textBox1.TextChanged += TextBox1_TextChanged;
@@ -431,6 +449,9 @@ namespace QuickBox
 		{
 			if (texteModifie)
 			{
+				if (isGeneratingCache) forceCacheReset = true;
+				cache.Clear();
+
 				string texte = textBox1.Text; // Obtenez le texte du TextBox
 
 				if (!string.IsNullOrEmpty(texte))
@@ -490,44 +511,54 @@ namespace QuickBox
 			
 			if (fastObjectListView1.SelectedIndex >= 0)
 			{
-				IGame game = (IGame)this.fastObjectListView1.SelectedObject;
-				label_gameTitle.Text = game.Title;
-				label_platform.Text = game.Platform;
-				selectedClearLogoPath = game.ClearLogoImagePath;
-				selectedVideoPath = game.GetVideoPath();
-				selectedBackgroundPath = game.BackgroundImagePath;
-				selectedMainImage = game.Box3DImagePath;
-
-				lbl_developer.Text = "Developer : " + game.Developer;
-				lbl_publisher.Text = "Publisher : " + game.Publisher;
-				lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
-				lbl_genre.Text = "Genre : " + game.GenresString;
-				lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
-				lbl_desc.Text = game.Notes;
-
-				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.FrontImagePath;
-				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.CartFrontImagePath;
-				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.Cart3DImagePath;
-				selectedImgList = game.GetAllImagesWithDetails();
-				if (string.IsNullOrEmpty(selectedMainImage) && selectedImgList.Any()) selectedMainImage = selectedImgList.FirstOrDefault().FilePath;
-
-				//label_gameTitle.Text = game.Title;
-				//label_platform.Text = game.Platform;
-					/*
-					if (!string.IsNullOrEmpty(selectedImagePath) && File.Exists(selectedImagePath))
+				if (Config.instantShow)
+				{
+					if (!tempLoad)
 					{
-						Image originalImage = System.Drawing.Image.FromFile(selectedImagePath);
-						pictureBox1.Image = ResizeImage(originalImage, pictureBox1.Size);
+						if (vlcControl.Visible)
+						{
+							vlcControl.Stop();
+							vlcControl.Visible = false;
+						}
+						pictureBox_gameImage.Visible = true;
+						int index = fastObjectListView1.SelectedIndex;
+						if (cache.ContainsKey(index))
+						{
+							pictureBox1.Image = cache[index].Logo;
+							pictureBox_gameImage.Image = cache[index].Background;
+						}
+						else
+						{
+							pictureBox1.Image = LoadingImg;
+							pictureBox_gameImage.Image = LoadingImg;
+						}
+
 					}
-					*/
+
+					selectedGame = (IGame)this.fastObjectListView1.SelectedObject;
+					selectedIndex = this.fastObjectListView1.SelectedIndex;
+					IGame game = selectedGame;
+					label_gameTitle.Text = game.Title;
+					label_platform.Text = game.Platform;
+
+					lbl_developer.Text = "Developer : " + game.Developer;
+					lbl_publisher.Text = "Publisher : " + game.Publisher;
+					lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
+					lbl_genre.Text = "Genre : " + game.GenresString;
+					lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+					lbl_desc.Text = game.Notes;
+
+				}
+				else
+				{
+					selectedGame = (IGame)this.fastObjectListView1.SelectedObject;
+					selectedIndex = this.fastObjectListView1.SelectedIndex;
+					IGame game = selectedGame;
+				}
+
 
 				imageLoadTimer.Start();
 			}
-			else
-			{
-				selectedClearLogoPath = "";
-			}
-
 			
 		}
 
@@ -544,15 +575,51 @@ namespace QuickBox
 
 		private void ImageLoadTimer_Tick(object sender, EventArgs e)
 		{
-			pictureBox1.Image = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, label_gameTitle.Text, pictureBox1.Size);
+			tempLoad = false;
+
+			IGame game = selectedGame;
+			int index = selectedIndex;
+
+			label_gameTitle.Text = game.Title;
+			label_platform.Text = game.Platform;
+			string selectedClearLogoPath = game.ClearLogoImagePath;
+			string selectedVideoPath = game.GetVideoPath();
+			string selectedBackgroundPath = game.BackgroundImagePath;
+			string selectedMainImage = game.Box3DImagePath;
+
+			lbl_developer.Text = "Developer : " + game.Developer;
+			lbl_publisher.Text = "Publisher : " + game.Publisher;
+			lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
+			lbl_genre.Text = "Genre : " + game.GenresString;
+			lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+			lbl_desc.Text = game.Notes;
+
+			if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.FrontImagePath;
+			if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.CartFrontImagePath;
+			if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.Cart3DImagePath;
+			ImageDetails[] selectedImgList = game.GetAllImagesWithDetails();
+			if (string.IsNullOrEmpty(selectedMainImage) && selectedImgList.Any()) selectedMainImage = selectedImgList.FirstOrDefault().FilePath;
+
+			if (!cache.ContainsKey(index) || !Config.instantShow)
+			{
+				pictureBox1.Image = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, label_gameTitle.Text, pictureBox1.Size);
+			}
+			
+			pictureBox1.Visible = true;
 			vlcControl.Visible = false;
 			pictureBox_gameImage.Visible = false;
+			flowLayoutPanelThumbs.Visible = true;
 
-			if (!string.IsNullOrEmpty(selectedVideoPath))
+			//flowLayoutPanel1.Visible = true;
+
+			if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo)
 			{
 				try
 				{
-					vlcControl.Audio.Volume = 0;
+					if (Config.volumeVideo == 0 && !vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+					if (Config.volumeVideo > 0 && vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+
+					//if(vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
 					vlcControl.Visible = true;
 					vlcControl.SetMedia(new FileInfo(selectedVideoPath));
 					vlcControl.Play();
@@ -570,22 +637,140 @@ namespace QuickBox
 				try
 				{
 					pictureBox_gameImage.Visible = true;
-					Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
-					pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+					if (!cache.ContainsKey(index) || !Config.instantShow)
+					{
+						Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
+						pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+					}
 				}
 				catch
 				{
 					pictureBox_gameImage.Image = null;
 				}
 			}
-			AddPictureBoxesToFlowLayoutPanel();
+			AddPictureBoxesToFlowLayoutPanel(selectedImgList);
+
+
+			if(Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
+
 
 			// Arrêtez le timer
 			imageLoadTimer.Stop();
 		}
 
-		private void AddPictureBoxesToFlowLayoutPanel()
+		private void GenerateCache()
 		{
+			isGeneratingCache = true;
+			try {
+				int index = fastObjectListView1.GetDisplayOrderOfItemIndex(fastObjectListView1.SelectedItem.Index);
+
+				var NewCache = new Dictionary<int, CacheImg>();
+				for (int i = 0; i < Config.tailleCache; i++)
+				{
+					if (forceCacheReset)
+					{
+						forceCacheReset = false;
+						isGeneratingCache = false;
+						return;
+					}
+					OLVListItem next = fastObjectListView1.GetNthItemInDisplayOrder(index + (i));
+					if (next != null)
+					{
+						int nextIndex = next.Index;
+						if (NewCache.ContainsKey(nextIndex))
+						{
+							continue;
+						}
+						if (cache.ContainsKey(nextIndex))
+						{
+							NewCache.Add(nextIndex, cache[nextIndex]);
+						}
+						else
+						{
+							IGame item = (IGame)next.RowObject;
+							string ClearLogoPath = item.ClearLogoImagePath;
+							string MainImage = item.Box3DImagePath;
+							string BackgroundPath = item.BackgroundImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.FrontImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.CartFrontImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.Cart3DImagePath;
+							if (string.IsNullOrEmpty(MainImage))
+							{
+								ImageDetails[] ImgList = item.GetAllImagesWithDetails();
+								if (string.IsNullOrEmpty(MainImage) && ImgList.Any()) MainImage = ImgList.FirstOrDefault().FilePath;
+							}
+							var NewCacheImg = new CacheImg();
+							NewCacheImg.Index = nextIndex;
+							NewCacheImg.Logo = GenerateLogo(ClearLogoPath, BackgroundPath, item.Title, pictureBox1.Size);
+							NewCacheImg.Background = null;
+							if (MainImage != "" && File.Exists(MainImage))
+							{
+								Image originalImage = System.Drawing.Image.FromFile(MainImage);
+								NewCacheImg.Background = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+							}
+							NewCache.Add(nextIndex, NewCacheImg);
+							cache.Add(nextIndex, NewCacheImg);
+						}
+					}
+					next = fastObjectListView1.GetNthItemInDisplayOrder(index - (i+1));
+					if (next != null)
+					{
+						int nextIndex = next.Index;
+						if (NewCache.ContainsKey(nextIndex))
+						{
+							continue;
+						}
+						if (cache.ContainsKey(nextIndex))
+						{
+							NewCache.Add(nextIndex, cache[nextIndex]);
+						}
+						else
+						{
+							IGame item = (IGame)next.RowObject;
+							string ClearLogoPath = item.ClearLogoImagePath;
+							string MainImage = item.Box3DImagePath;
+							string BackgroundPath = item.BackgroundImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.FrontImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.CartFrontImagePath;
+							if (string.IsNullOrEmpty(MainImage)) MainImage = item.Cart3DImagePath;
+							if (string.IsNullOrEmpty(MainImage))
+							{
+								ImageDetails[] ImgList = item.GetAllImagesWithDetails();
+								if (string.IsNullOrEmpty(MainImage) && ImgList.Any()) MainImage = ImgList.FirstOrDefault().FilePath;
+							}
+							var NewCacheImg = new CacheImg();
+							NewCacheImg.Index = nextIndex;
+							NewCacheImg.Logo = GenerateLogo(ClearLogoPath, BackgroundPath, item.Title, pictureBox1.Size);
+							NewCacheImg.Background = null;
+							if (MainImage != "" && File.Exists(MainImage))
+							{
+								Image originalImage = System.Drawing.Image.FromFile(MainImage);
+								NewCacheImg.Background = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+							}
+							NewCache.Add(nextIndex, NewCacheImg);
+							cache.Add(nextIndex, NewCacheImg);
+						}
+					}
+
+				}
+				if (forceCacheReset)
+				{
+					forceCacheReset = false;
+					isGeneratingCache = false;
+					return;
+				}
+				cache = NewCache;
+			}
+			catch(Exception ex)
+			{
+				MessageBox.Show(ex.Message);
+			}
+			isGeneratingCache = false;
+		}
+
+		private void AddPictureBoxesToFlowLayoutPanel(ImageDetails[] selectedImgList)
+		{
+			if(flowLayoutPanelThumbs.Visible == false) flowLayoutPanelThumbs.Visible = true;
 			// Supprimez tous les contrôles existants dans le FlowLayoutPanel
 			flowLayoutPanelThumbs.Controls.Clear();
 
@@ -663,7 +848,7 @@ namespace QuickBox
 			}
 		}
 
-		private Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
+		public  Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
 		{
 			if (!string.IsNullOrEmpty(backgroundPath) && backgroundPath.Contains(@"\Platforms\")) backgroundPath = "";
 
@@ -893,6 +1078,9 @@ namespace QuickBox
 
 		private void treeListView1_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			ClearDisplay();
+			if (isGeneratingCache) forceCacheReset = true;
+			cache.Clear();
 			//IPlatform platform = (IPlatform)this.treeListView1.SelectedObject;
 			var objectPlatform = this.treeListView1.SelectedObject;
 			if (objectPlatform is IPlaylist)
@@ -1052,6 +1240,38 @@ namespace QuickBox
 		{
 
 		}
+
+		private void treeListView1_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			if (treeListView1.IsExpanded(treeListView1.SelectedObject))
+			{
+				treeListView1.Collapse(treeListView1.SelectedObject);
+			}
+			else
+			{
+				treeListView1.Expand(treeListView1.SelectedObject);
+			}
+		}
+
+		private void ClearDisplay()
+		{
+			lbl_desc.Text = "";
+			lbl_developer.Text = "";
+			lbl_file.Text = "";
+			lbl_genre.Text = "";
+			lbl_publisher.Text = "";
+			lbl_rlzdate.Text = "";
+			label_gameTitle.Text = "";
+			label_platform.Text = "";
+			pictureBox1.Visible = false;
+			pictureBox_gameImage.Visible = false;
+			flowLayoutPanelThumbs.Visible = false;
+			if (vlcControl != null && vlcControl.Visible)
+			{
+				vlcControl.Stop();
+				vlcControl.Visible = false;
+			}
+		}
 	}
 	public static class StringExtensions
 	{
@@ -1060,6 +1280,65 @@ namespace QuickBox
 			return source?.IndexOf(toCheck, comp) >= 0;
 		}
 	}
+
+
+
+	public class CacheImg
+	{
+		public int Index;
+		public Image Logo = null;
+		public Image Background = null;
+	}
+	/*
+	public class GameDetail
+	{
+		public int Index;
+		public string Title;
+		public string Platform;
+		public string Description;
+		public string ClearLogoImagePath;
+		public string VideoPath;
+		public string BackgroundPath;
+		public string MainImage;
+
+		public string Developer;
+		public string Publisher;
+		public string File;
+		public string Genre;
+		public string RlzDate;
+		public string Desc;
+		ImageDetails[] ImgList;
+
+		Image ImageLogo = null;
+		Image ImageMain = null;
+
+		public GameDetail(int index, IGame game, Size SizeLogo, Size SizeMain)
+		{
+			Index = index;
+			Title = game.Title;
+			Platform = game.Platform;
+			ClearLogoImagePath = game.ClearLogoImagePath;
+			VideoPath = game.GetVideoPath();
+			BackgroundPath = game.BackgroundImagePath;
+			MainImage = game.Box3DImagePath;
+			if (string.IsNullOrEmpty(MainImage)) MainImage = game.FrontImagePath;
+			if (string.IsNullOrEmpty(MainImage)) MainImage = game.CartFrontImagePath;
+			if (string.IsNullOrEmpty(MainImage)) MainImage = game.Cart3DImagePath;
+
+			Developer = game.Developer;
+			Publisher = game.Publisher;
+			Genre = game.GenresString;
+			RlzDate = game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+			Desc = game.Notes;
+
+			ImgList = game.GetAllImagesWithDetails();
+			if (string.IsNullOrEmpty(MainImage) && ImgList.Any()) MainImage = ImgList.FirstOrDefault().FilePath;
+			ImageLogo = Form1.GenerateLogo(ClearLogoImagePath, BackgroundPath, Title, SizeLogo);
+			//ImageMain = Form1.GenerateLogo(ClearLogoImagePath, BackgroundPath, Title, SizeLogo);
+
+		}
+	}
+	*/
 
 
 }
