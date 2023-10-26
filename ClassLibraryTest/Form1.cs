@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Policy;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -67,7 +68,14 @@ namespace QuickBox
 		private ImageDetails[] selectedImgList = null;
 		*/
 
-		private Dictionary<int,CacheImg> cache = new Dictionary<int,CacheImg>();
+		private Dictionary<int,CacheImg> cache = new Dictionary<int,CacheImg>(Config.tailleCache * 2);
+
+		private Dictionary<int, CacheImg> newcache = new Dictionary<int, CacheImg>(Config.tailleCache * 2);
+		private int cacheIndexMin = -1;
+		private int cacheIndexMax = -1;
+		private Task TaskGenerateCache = null;
+
+
 		private bool isGeneratingCache = false;
 		bool forceCacheReset = false;
 
@@ -77,6 +85,7 @@ namespace QuickBox
 		private bool tempLoad = false;
 
 		private Image LoadingImg;
+		private Image BackgroundEmpty;
 
 		private bool _gameLaunched = false;
 		private System.Threading.Timer _resetGameLaunchedTimer;
@@ -133,6 +142,9 @@ namespace QuickBox
 			treeListView2.Scrollable = false;
 
 			ClearDisplay();
+			Image background = System.Drawing.Image.FromFile(Path.Combine(Config.GetPluginPath(), "background.jpg"));
+			BackgroundEmpty = ResizeImage(background, pictureBox1.Size);
+
 			LoadingImg = GenerateLogo("", "", "Loading...", pictureBox1.Size);
 
 			string assemblyPath = Assembly.GetEntryAssembly().Location;
@@ -675,17 +687,45 @@ namespace QuickBox
 				g.InterpolationMode = InterpolationMode.HighQualityBicubic;
 				g.DrawImage(img, 0, 0, size.Width, size.Height);
 			}
+			img.Dispose();
 			return newImage;
 		}
+		
 
 		private void ImageLoadTimer_Tick(object sender, EventArgs e)
 		{
 			if (selectedGame != null)
 			{
+				
 				Task.Run(() => GameDisplay(true,pictureBox1.Size,pictureBox_gameImage.Size));
-				if (Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
+				if (Config.tailleCache > 0)
+				{
+					if (isGeneratingCache)
+					{
+						if (selectedIndex >= cacheIndexMin && selectedIndex <= cacheIndexMax)
+						{
+
+						}
+						else
+						{
+							if (isGeneratingCache && TaskGenerateCache.Status == TaskStatus.Running)
+							{
+								forceCacheReset = true;
+								TaskGenerateCache.Wait();
+								newcache.Clear();
+								cacheIndexMin = int.MaxValue;
+								cacheIndexMax = int.MaxValue;
+							}
+						}
+					}
+					if (!isGeneratingCache)
+					{
+						TaskGenerateCache = Task.Run(() => GenerateCache());
+					}
+				}
 			}
 			imageLoadTimer.Stop();
+
 			/*
 			tempLoad = false;
 
@@ -773,12 +813,14 @@ namespace QuickBox
 			isGeneratingCache = true;
 			try {
 				int index = fastObjectListView1.GetDisplayOrderOfItemIndex(fastObjectListView1.SelectedItem.Index);
-
-				var NewCache = new Dictionary<int, CacheImg>();
+				cacheIndexMin = index - (Config.tailleCache-1);
+				cacheIndexMax = index + Config.tailleCache;
+				newcache.Clear();
 				for (int i = 0; i < Config.tailleCache; i++)
 				{
 					if (forceCacheReset)
 					{
+						newcache.Clear();
 						forceCacheReset = false;
 						isGeneratingCache = false;
 						return;
@@ -787,13 +829,13 @@ namespace QuickBox
 					if (next != null)
 					{
 						int nextIndex = next.Index;
-						if (NewCache.ContainsKey(nextIndex))
+						if (newcache.ContainsKey(nextIndex))
 						{
 							continue;
 						}
 						if (cache.ContainsKey(nextIndex))
 						{
-							NewCache.Add(nextIndex, cache[nextIndex]);
+							newcache.Add(nextIndex, cache[nextIndex]);
 						}
 						else
 						{
@@ -818,21 +860,21 @@ namespace QuickBox
 								Image originalImage = System.Drawing.Image.FromFile(MainImage);
 								NewCacheImg.Background = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
 							}
-							NewCache.Add(nextIndex, NewCacheImg);
-							cache.Add(nextIndex, NewCacheImg);
+							newcache.Add(nextIndex, NewCacheImg);
+							//cache.Add(nextIndex, NewCacheImg);
 						}
 					}
 					next = fastObjectListView1.GetNthItemInDisplayOrder(index - (i+1));
 					if (next != null)
 					{
 						int nextIndex = next.Index;
-						if (NewCache.ContainsKey(nextIndex))
+						if (newcache.ContainsKey(nextIndex))
 						{
 							continue;
 						}
 						if (cache.ContainsKey(nextIndex))
 						{
-							NewCache.Add(nextIndex, cache[nextIndex]);
+							newcache.Add(nextIndex, cache[nextIndex]);
 						}
 						else
 						{
@@ -857,23 +899,26 @@ namespace QuickBox
 								Image originalImage = System.Drawing.Image.FromFile(MainImage);
 								NewCacheImg.Background = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
 							}
-							NewCache.Add(nextIndex, NewCacheImg);
-							cache.Add(nextIndex, NewCacheImg);
+							newcache.Add(nextIndex, NewCacheImg);
+							//cache.Add(nextIndex, NewCacheImg);
 						}
 					}
 
 				}
 				if (forceCacheReset)
 				{
+					newcache.Clear();
 					forceCacheReset = false;
 					isGeneratingCache = false;
 					return;
 				}
-				cache = NewCache;
+				cache = new Dictionary<int, CacheImg>(newcache);
+				newcache.Clear();
 			}
 			catch(Exception ex)
 			{
-				MessageBox.Show(ex.Message);
+
+				//MessageBox.Show("msg = " + ex.Message);
 			}
 			isGeneratingCache = false;
 		}
@@ -964,6 +1009,7 @@ namespace QuickBox
 			}
 		}
 
+	
 		public Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
 		{
 			if (!string.IsNullOrEmpty(backgroundPath) && backgroundPath.Contains(@"\Platforms\")) backgroundPath = "";
@@ -972,6 +1018,7 @@ namespace QuickBox
 			SizeLogo.Width = (int)Math.Round((double)SizeLogo.Width * 0.7);
 			SizeLogo.Height = (int)Math.Round((double)SizeLogo.Height * 0.5);
 
+			bool disposeBackground = true;
 			Image background = null;
 			if (!string.IsNullOrEmpty(backgroundPath) && File.Exists(backgroundPath))
 			{
@@ -985,8 +1032,10 @@ namespace QuickBox
 			}
 			if(background == null)
 			{
-				background = System.Drawing.Image.FromFile(Path.Combine(Config.GetPluginPath(), "background.jpg"));
-				background = ResizeImage(background, taille);
+				disposeBackground = false;
+				//background = System.Drawing.Image.FromFile(Path.Combine(Config.GetPluginPath(), "background.jpg"));
+				//background = ResizeImage(background, taille);
+				background = BackgroundEmpty;
 			}
 
 			Image logo = null;
@@ -1026,8 +1075,78 @@ namespace QuickBox
 				// Dessinez le logo sur l'image de fond
 				g.DrawImage(logo, logoX, logoY, logo.Width, logo.Height);
 			}
+			logo.Dispose();
+			if(disposeBackground) background.Dispose();
 			return newImage;
 		}
+		
+		/*
+		public Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
+		{
+			Image background = null;
+			if (!string.IsNullOrEmpty(backgroundPath) && File.Exists(backgroundPath))
+			{
+				try
+				{
+					background = System.Drawing.Image.FromFile(backgroundPath);
+					if (background.Size != taille)
+					{
+						background = ResizeImage(background, taille);
+					}
+				}
+				catch { }
+			}
+			if (background == null)
+			{
+				background = System.Drawing.Image.FromFile(Path.Combine(Config.GetPluginPath(), "background.jpg"));
+				background = ResizeImage(background, taille);
+			}
+
+			Size SizeLogo = new Size((int)Math.Round(taille.Width * 0.7), (int)Math.Round(taille.Height * 0.5));
+
+			Image logo = null;
+			if (!string.IsNullOrEmpty(logoPath) && File.Exists(logoPath))
+			{
+				try
+				{
+					logo = System.Drawing.Image.FromFile(logoPath);
+					if (logo.Size != SizeLogo)
+					{
+						logo = ResizeImage(logo, SizeLogo);
+					}
+				}
+				catch { }
+			}
+			if (logo == null)
+			{
+				logo = GenerateTextImage(GameName, SizeLogo.Width, SizeLogo.Height);
+			}
+
+			using (Bitmap newImage = new Bitmap(taille.Width, taille.Height))
+			using (Graphics g = Graphics.FromImage(newImage))
+			{
+				// Créez une matrice de couleur de transparence (ici, 50% de transparence)
+				ColorMatrix colorMatrix = new ColorMatrix();
+				colorMatrix.Matrix33 = 0.5f; // Réglez la valeur de transparence entre 0 (complètement transparent) et 1 (complètement opaque)
+
+				// Créez un objet ImageAttributes avec la matrice de couleur
+				ImageAttributes imageAttributes = new ImageAttributes();
+				imageAttributes.SetColorMatrix(colorMatrix);
+
+				// Dessinez l'image de fond avec le filtre de transparence
+				g.DrawImage(background, new Rectangle(0, 0, background.Width, background.Height), 0, 0, background.Width, background.Height, GraphicsUnit.Pixel, imageAttributes);
+
+				// Définissez la position où vous souhaitez afficher le logo
+				int logoX = (int)Math.Round((taille.Width - SizeLogo.Width) / 2.0); // Coordonnée X
+				int logoY = (int)Math.Round((taille.Height - SizeLogo.Height) / 2.0); // Coordonnée Y
+
+				// Dessinez le logo sur l'image de fond
+				g.DrawImage(logo, logoX, logoY, logo.Width, logo.Height);
+
+				return newImage;
+			}
+		}
+		*/
 
 		/*
 		public static Bitmap GenerateTextImage(string text, int width, int height)
@@ -1182,7 +1301,7 @@ namespace QuickBox
 
 				graphics.DrawImage(image, x, y, newWidth, newHeight);
 			}
-
+			image.Dispose();
 			return newImage;
 		}
 
@@ -1246,6 +1365,7 @@ namespace QuickBox
 
 		private void GameDisplay(bool showMedia = false, Size LogoSize = new Size(), Size MainSize = new Size())
 		{
+			
 			IGame game = selectedGame;
 			int index = selectedIndex;
 			if (showMedia == false)
@@ -1264,6 +1384,11 @@ namespace QuickBox
 						{
 							pictureBox1.Image = cache[index].Logo;
 							pictureBox_gameImage.Image = cache[index].Background;
+						}
+						else if (newcache.ContainsKey(index))
+						{
+							pictureBox1.Image = newcache[index].Logo;
+							pictureBox_gameImage.Image = newcache[index].Background;
 						}
 						else
 						{
@@ -1297,7 +1422,7 @@ namespace QuickBox
 			}
 			else
 			{
-				tempLoad = false;
+				tempLoad = true;
 
 
 
@@ -1316,13 +1441,17 @@ namespace QuickBox
 				Image ImgMain = null;
 				string videoPath = "";
 
-				if (!cache.ContainsKey(index))
+				if (cache.ContainsKey(index))
 				{
-					ImgLogo = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, game.Title, LogoSize);
+					ImgLogo = cache[index].Logo;
+				}
+				else if (newcache.ContainsKey(index))
+				{
+					ImgLogo = newcache[index].Logo;
 				}
 				else
 				{
-					ImgLogo = cache[index].Logo;
+					ImgLogo = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, game.Title, LogoSize);
 				}
 
 				if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
@@ -1336,14 +1465,19 @@ namespace QuickBox
 				{
 					try
 					{
-						if (!cache.ContainsKey(index))
+						if (cache.ContainsKey(index))
 						{
-							Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
-							ImgMain = ResizeImageBest(originalImage, MainSize);
+							ImgMain = cache[index].Background;
+						}
+						else if (newcache.ContainsKey(index))
+						{
+							ImgMain = newcache[index].Background;
 						}
 						else
 						{
-							ImgMain = cache[index].Background;
+							Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
+							ImgMain = ResizeImageBest(originalImage, MainSize);
+							
 						}
 					}
 					catch { }
@@ -1410,56 +1544,8 @@ namespace QuickBox
 				else
 					methodInvokerDelegate();
 
-				/*
-
-
-				pictureBox1.Visible = true;
-				vlcControl.Visible = false;
-				pictureBox_gameImage.Visible = false;
-				flowLayoutPanelThumbs.Visible = true;
-
-				//flowLayoutPanel1.Visible = true;
-
-				if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
-				{
-					try
-					{
-						//if (Config.volumeVideo == 0 && !vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
-						//if (Config.volumeVideo > 0 && vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
-
-						//if (Config.muteVideo) vlcControl.Audio.Volume = 0;
-						vlcControl.Visible = true;
-						vlcControl.SetMedia(new FileInfo(selectedVideoPath));
-						vlcControl.Play();
-					}
-					catch (Exception ex)
-					{
-						vlcControl.Stop();
-						//MessageBox.Show(ex.Message);
-					}
-				}
-				else vlcControl.Stop();
-
-				if (!vlcControl.Visible && !string.IsNullOrEmpty(selectedMainImage))
-				{
-					try
-					{
-						pictureBox_gameImage.Visible = true;
-						if (!cache.ContainsKey(index) || !Config.instantShow)
-						{
-							Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
-							pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
-						}
-					}
-					catch
-					{
-						pictureBox_gameImage.Image = null;
-					}
-				}
-				AddPictureBoxesToFlowLayoutPanel(selectedImgList);
-				*/
-				//if (Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
 				imageLoadTimer.Stop();
+				tempLoad = false;
 			}
 
 		}
@@ -1867,11 +1953,17 @@ namespace QuickBox
 	}
 
 
-	public class CacheImg
+	public class CacheImg : IDisposable
 	{
 		public int Index;
 		public Image Logo = null;
 		public Image Background = null;
+
+		public void Dispose()
+		{
+			Logo.Dispose();
+			Background.Dispose();
+		}
 	}
 	/*
 	public class GameDetail
