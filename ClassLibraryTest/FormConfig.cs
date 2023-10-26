@@ -22,11 +22,12 @@ namespace QuickBox
 		{
 			Config.onLaunch = chk_onLaunch.Checked;
 			Config.showVideo = chk_showVideo.Checked;
-			Config.volumeVideo = trk_volumeVideo.Value;
+			Config.muteVideo = chk_muteVideo.Checked;
 			Config.speeedUpDecompress = chk_speeedUpDecompress.Checked;
 			Config.tailleCache = (int)num_tailleCache.Value;
 			Config.delayShow = (int)num_delayShow.Value;
 			Config.instantShow = chk_instantShow.Checked;
+			Config.showExtraInfo = chk_showExtraInfo.Checked;
 			Config.SaveConfig();
 			this.DialogResult = DialogResult.OK;
 			this.Close();
@@ -36,11 +37,12 @@ namespace QuickBox
 		{
 			chk_onLaunch.Checked = Config.onLaunch;
 			chk_showVideo.Checked = Config.showVideo;
-			trk_volumeVideo.Value = Config.volumeVideo;
+			chk_muteVideo.Checked = Config.muteVideo;
 			chk_speeedUpDecompress.Checked = Config.speeedUpDecompress;
 			num_tailleCache.Value = Config.tailleCache;
 			num_delayShow.Value = Config.delayShow;
 			chk_instantShow.Checked = Config.instantShow;
+			chk_showExtraInfo.Checked = Config.showExtraInfo;
 		}
 	}
 }

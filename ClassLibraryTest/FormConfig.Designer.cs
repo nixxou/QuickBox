@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
 			this.chk_onLaunch = new System.Windows.Forms.CheckBox();
-			this.trk_volumeVideo = new System.Windows.Forms.TrackBar();
 			this.chk_showVideo = new System.Windows.Forms.CheckBox();
 			this.chk_speeedUpDecompress = new System.Windows.Forms.CheckBox();
 			this.num_tailleCache = new System.Windows.Forms.NumericUpDown();
@@ -37,9 +36,9 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.chk_instantShow = new System.Windows.Forms.CheckBox();
-			this.label3 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.trk_volumeVideo)).BeginInit();
+			this.chk_muteVideo = new System.Windows.Forms.CheckBox();
+			this.chk_showExtraInfo = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.num_tailleCache)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.num_delayShow)).BeginInit();
 			this.SuspendLayout();
@@ -53,14 +52,6 @@
 			this.chk_onLaunch.TabIndex = 0;
 			this.chk_onLaunch.Text = "Show QuickBox on Launch";
 			this.chk_onLaunch.UseVisualStyleBackColor = true;
-			// 
-			// trk_volumeVideo
-			// 
-			this.trk_volumeVideo.Location = new System.Drawing.Point(90, 93);
-			this.trk_volumeVideo.Maximum = 100;
-			this.trk_volumeVideo.Name = "trk_volumeVideo";
-			this.trk_volumeVideo.Size = new System.Drawing.Size(293, 45);
-			this.trk_volumeVideo.TabIndex = 1;
 			// 
 			// chk_showVideo
 			// 
@@ -144,15 +135,6 @@
 			this.chk_instantShow.Text = "Show Text instant";
 			this.chk_instantShow.UseVisualStyleBackColor = true;
 			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(12, 93);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(72, 13);
-			this.label3.TabIndex = 9;
-			this.label3.Text = "Video Volume";
-			// 
 			// button1
 			// 
 			this.button1.Location = new System.Drawing.Point(435, 248);
@@ -163,13 +145,34 @@
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// chk_muteVideo
+			// 
+			this.chk_muteVideo.AutoSize = true;
+			this.chk_muteVideo.Location = new System.Drawing.Point(10, 81);
+			this.chk_muteVideo.Name = "chk_muteVideo";
+			this.chk_muteVideo.Size = new System.Drawing.Size(79, 17);
+			this.chk_muteVideo.TabIndex = 11;
+			this.chk_muteVideo.Text = "Mute video";
+			this.chk_muteVideo.UseVisualStyleBackColor = true;
+			// 
+			// chk_showExtraInfo
+			// 
+			this.chk_showExtraInfo.AutoSize = true;
+			this.chk_showExtraInfo.Location = new System.Drawing.Point(10, 104);
+			this.chk_showExtraInfo.Name = "chk_showExtraInfo";
+			this.chk_showExtraInfo.Size = new System.Drawing.Size(98, 17);
+			this.chk_showExtraInfo.TabIndex = 12;
+			this.chk_showExtraInfo.Text = "Show ExtraInfo";
+			this.chk_showExtraInfo.UseVisualStyleBackColor = true;
+			// 
 			// FormConfig
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(522, 283);
+			this.Controls.Add(this.chk_showExtraInfo);
+			this.Controls.Add(this.chk_muteVideo);
 			this.Controls.Add(this.button1);
-			this.Controls.Add(this.label3);
 			this.Controls.Add(this.chk_instantShow);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -177,12 +180,10 @@
 			this.Controls.Add(this.num_tailleCache);
 			this.Controls.Add(this.chk_speeedUpDecompress);
 			this.Controls.Add(this.chk_showVideo);
-			this.Controls.Add(this.trk_volumeVideo);
 			this.Controls.Add(this.chk_onLaunch);
 			this.Name = "FormConfig";
 			this.Text = "FormConfig";
 			this.Load += new System.EventHandler(this.FormConfig_Load);
-			((System.ComponentModel.ISupportInitialize)(this.trk_volumeVideo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.num_tailleCache)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.num_delayShow)).EndInit();
 			this.ResumeLayout(false);
@@ -193,7 +194,6 @@
 		#endregion
 
 		private System.Windows.Forms.CheckBox chk_onLaunch;
-		private System.Windows.Forms.TrackBar trk_volumeVideo;
 		private System.Windows.Forms.CheckBox chk_showVideo;
 		private System.Windows.Forms.CheckBox chk_speeedUpDecompress;
 		private System.Windows.Forms.NumericUpDown num_tailleCache;
@@ -201,7 +201,8 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox chk_instantShow;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.CheckBox chk_muteVideo;
+		private System.Windows.Forms.CheckBox chk_showExtraInfo;
 	}
 }

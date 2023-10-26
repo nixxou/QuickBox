@@ -95,6 +95,9 @@
 			this.lbl_developer = new System.Windows.Forms.Label();
 			this.lbl_rlzdate = new System.Windows.Forms.Label();
 			this.lbl_desc = new System.Windows.Forms.Label();
+			this.treeListView2 = new BrightIdeasSoftware.TreeListView();
+			this.olvColumn37 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+			this.olvColumnValue = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
 			this.contextMenuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.treeListView1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.fastObjectListView1)).BeginInit();
@@ -108,6 +111,7 @@
 			this.flowLayoutPanelThumbs.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.panel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.treeListView2)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// contextMenuStrip1
@@ -141,13 +145,12 @@
 			// 
 			// timer_hideLb
 			// 
-			this.timer_hideLb.Interval = 20;
 			this.timer_hideLb.Tick += new System.EventHandler(this.timer_hideLb_Tick);
 			// 
 			// button2
 			// 
 			this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.button2.Location = new System.Drawing.Point(290, 3);
+			this.button2.Location = new System.Drawing.Point(291, 3);
 			this.button2.Name = "button2";
 			this.button2.Size = new System.Drawing.Size(75, 23);
 			this.button2.TabIndex = 7;
@@ -162,7 +165,7 @@
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(130, 23);
 			this.button1.TabIndex = 6;
-			this.button1.Text = "Show/Hide Launchbox";
+			this.button1.Text = "Return to Launchbox";
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.button1_Click_1);
 			// 
@@ -171,7 +174,7 @@
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.textBox1.Location = new System.Drawing.Point(3, 17);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(220, 20);
+			this.textBox1.Size = new System.Drawing.Size(212, 20);
 			this.textBox1.TabIndex = 2;
 			this.textBox1.TextChanged += new System.EventHandler(this.TextBox1_TextChanged);
 			// 
@@ -189,7 +192,7 @@
 			this.treeListView1.MultiSelect = false;
 			this.treeListView1.Name = "treeListView1";
 			this.treeListView1.ShowGroups = false;
-			this.treeListView1.Size = new System.Drawing.Size(220, 976);
+			this.treeListView1.Size = new System.Drawing.Size(212, 793);
 			this.treeListView1.TabIndex = 4;
 			this.treeListView1.UseCompatibleStateImageBehavior = false;
 			this.treeListView1.View = System.Windows.Forms.View.Details;
@@ -257,11 +260,11 @@
 			this.fastObjectListView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.fastObjectListView1.FullRowSelect = true;
 			this.fastObjectListView1.HideSelection = false;
-			this.fastObjectListView1.Location = new System.Drawing.Point(229, 43);
+			this.fastObjectListView1.Location = new System.Drawing.Point(221, 43);
 			this.fastObjectListView1.MultiSelect = false;
 			this.fastObjectListView1.Name = "fastObjectListView1";
 			this.fastObjectListView1.ShowGroups = false;
-			this.fastObjectListView1.Size = new System.Drawing.Size(898, 976);
+			this.fastObjectListView1.Size = new System.Drawing.Size(866, 793);
 			this.fastObjectListView1.TabIndex = 8;
 			this.fastObjectListView1.UseCompatibleStateImageBehavior = false;
 			this.fastObjectListView1.UseFilterIndicator = true;
@@ -508,7 +511,7 @@
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 374F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 375F));
 			this.tableLayoutPanel1.Controls.Add(this.treeListView1, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 0);
@@ -520,7 +523,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(1504, 1022);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(1465, 839);
 			this.tableLayoutPanel1.TabIndex = 10;
 			this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint_1);
 			// 
@@ -532,12 +535,12 @@
 			this.tableLayoutPanel3.Controls.Add(this.button1, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.button2, 1, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(1133, 3);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(1093, 3);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(368, 34);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(369, 34);
 			this.tableLayoutPanel3.TabIndex = 1;
 			// 
 			// flowLayoutPanel1
@@ -550,12 +553,13 @@
 			this.flowLayoutPanel1.Controls.Add(this.panel2);
 			this.flowLayoutPanel1.Controls.Add(this.panel3);
 			this.flowLayoutPanel1.Controls.Add(this.lbl_desc);
+			this.flowLayoutPanel1.Controls.Add(this.treeListView2);
 			this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(1133, 43);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(1093, 43);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
-			this.flowLayoutPanel1.Size = new System.Drawing.Size(368, 976);
+			this.flowLayoutPanel1.Size = new System.Drawing.Size(369, 793);
 			this.flowLayoutPanel1.TabIndex = 9;
 			this.flowLayoutPanel1.WrapContents = false;
 			// 
@@ -723,17 +727,61 @@
 			this.lbl_desc.Location = new System.Drawing.Point(3, 674);
 			this.lbl_desc.MaximumSize = new System.Drawing.Size(320, 0);
 			this.lbl_desc.Name = "lbl_desc";
-			this.lbl_desc.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-			this.lbl_desc.Size = new System.Drawing.Size(320, 18);
+			this.lbl_desc.Padding = new System.Windows.Forms.Padding(15, 0, 0, 15);
+			this.lbl_desc.Size = new System.Drawing.Size(320, 33);
 			this.lbl_desc.TabIndex = 15;
 			this.lbl_desc.Text = "xxxx";
+			// 
+			// treeListView2
+			// 
+			this.treeListView2.AllColumns.Add(this.olvColumn37);
+			this.treeListView2.AllColumns.Add(this.olvColumnValue);
+			this.treeListView2.CellEditUseWholeCell = false;
+			this.treeListView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumn37,
+            this.olvColumnValue});
+			this.treeListView2.CopySelectionOnControlC = false;
+			this.treeListView2.CopySelectionOnControlCUsesDragSource = false;
+			this.treeListView2.Cursor = System.Windows.Forms.Cursors.Default;
+			this.treeListView2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.treeListView2.FullRowSelect = true;
+			this.treeListView2.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.treeListView2.HideSelection = false;
+			this.treeListView2.Location = new System.Drawing.Point(3, 710);
+			this.treeListView2.MultiSelect = false;
+			this.treeListView2.Name = "treeListView2";
+			this.treeListView2.Scrollable = false;
+			this.treeListView2.ShowGroups = false;
+			this.treeListView2.Size = new System.Drawing.Size(345, 793);
+			this.treeListView2.TabIndex = 16;
+			this.treeListView2.UseCompatibleStateImageBehavior = false;
+			this.treeListView2.UseHyperlinks = true;
+			this.treeListView2.View = System.Windows.Forms.View.Details;
+			this.treeListView2.VirtualMode = true;
+			this.treeListView2.IsHyperlink += new System.EventHandler<BrightIdeasSoftware.IsHyperlinkEventArgs>(this.treeListView2_IsHyperlink);
+			this.treeListView2.SelectedIndexChanged += new System.EventHandler(this.treeListView2_SelectedIndexChanged);
+			this.treeListView2.Leave += new System.EventHandler(this.treeListView2_Leave);
+			// 
+			// olvColumn37
+			// 
+			this.olvColumn37.AspectName = "Name";
+			this.olvColumn37.Text = "Name";
+			this.olvColumn37.Width = 100;
+			// 
+			// olvColumnValue
+			// 
+			this.olvColumnValue.AspectName = "Value";
+			this.olvColumnValue.Hyperlink = true;
+			this.olvColumnValue.Text = "Value";
+			this.olvColumnValue.Width = 290;
 			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1504, 1022);
+			this.ClientSize = new System.Drawing.Size(1465, 839);
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.DoubleBuffered = true;
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -755,6 +803,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.treeListView2)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -826,5 +875,8 @@
 		private BrightIdeasSoftware.OLVColumn olvColumn34;
 		private BrightIdeasSoftware.OLVColumn olvColumn35;
 		private BrightIdeasSoftware.OLVColumn olvColumn36;
+		private BrightIdeasSoftware.TreeListView treeListView2;
+		private BrightIdeasSoftware.OLVColumn olvColumn37;
+		private BrightIdeasSoftware.OLVColumn olvColumnValue;
 	}
 }

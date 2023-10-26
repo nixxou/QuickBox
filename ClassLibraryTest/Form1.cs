@@ -13,7 +13,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -50,7 +52,7 @@ namespace QuickBox
 		private Dictionary<string, object> preloadPlatformCategory = new Dictionary<string, object>();
 		private Dictionary<string, Image> preloadPlatformIcons = new Dictionary<string, Image>();
 
-		private Timer imageLoadTimer = new Timer();
+		private System.Windows.Forms.Timer imageLoadTimer = new System.Windows.Forms.Timer();
 		private IGame selectedGame = null;
 		private int selectedIndex = -1;
 		/*
@@ -72,6 +74,38 @@ namespace QuickBox
 
 		private Image LoadingImg;
 
+		private bool _gameLaunched = false;
+		private System.Threading.Timer _resetGameLaunchedTimer;
+
+		public bool gameLaunched
+		{
+			get
+			{
+				return this._gameLaunched;
+			}
+			set
+			{
+				if (value == true)
+				{
+					this._gameLaunched = true;
+					if (_resetGameLaunchedTimer != null) _resetGameLaunchedTimer.Dispose();
+					
+					_resetGameLaunchedTimer = new System.Threading.Timer(_ =>
+					{
+						this._gameLaunched = false;
+						_resetGameLaunchedTimer.Dispose(); // N'oubliez pas de libérer les ressources du timer
+					}, null, 5000, Timeout.Infinite);
+				}
+				else
+				{
+					this._gameLaunched = false;
+				}
+			}
+		}
+
+
+
+
 
 		public Form1()
 		{
@@ -87,9 +121,22 @@ namespace QuickBox
 
 
 			InitializeComponent();
+			treeListView2.BackColor = this.BackColor;
+			treeListView2.BorderStyle = BorderStyle.None;
+			//treeListView2.BorderStyle = BorderStyle.FixedSingle;
+			treeListView2.HyperlinkClicked += HyperLinkClicked;
+			treeListView2.Visible = false;
+			treeListView2.Scrollable = false;
+
 			ClearDisplay();
 			LoadingImg = GenerateLogo("", "", "Loading...", pictureBox1.Size);
-			var libDirectory = new DirectoryInfo(@"I:\LaunchBox\Core\ThirdParty\VLC\x64");
+
+			string assemblyPath = Assembly.GetEntryAssembly().Location;
+			string assemblyDirectory = Path.GetDirectoryName(assemblyPath);
+			string launchBoxRootPath = Path.GetFullPath(Path.Combine(assemblyDirectory, @".."));
+			string vlcLibPath = Path.Combine(launchBoxRootPath, "Core", "ThirdParty", "VLC", "x64");
+
+			var libDirectory = new DirectoryInfo(vlcLibPath);
 
 			var options = new string[]
 			{
@@ -99,8 +146,9 @@ namespace QuickBox
 
 			vlcControl = new Vlc.DotNet.Forms.VlcControl();
 			vlcControl.BeginInit();
-			vlcControl.VlcLibDirectory = new DirectoryInfo(@"I:\LaunchBox\Core\ThirdParty\VLC\x64");
-			vlcControl.VlcMediaplayerOptions = new string[] { "--aout=directsound" };
+			vlcControl.VlcLibDirectory = libDirectory;
+			if(Config.muteVideo) vlcControl.VlcMediaplayerOptions = new string[] { "--aout=directsound", "--no-audio" };
+			else vlcControl.VlcMediaplayerOptions = new string[] { "--aout=directsound" };
 
 			vlcControl.Location = pictureBox_gameImage.Location;
 			vlcControl.Size = pictureBox_gameImage.Size;
@@ -140,6 +188,18 @@ namespace QuickBox
 			};
 
 			treeListView1.Roots = rootPlatforms;
+
+			if(Config.SizeX >= this.Size.Width && Config.SizeY >= this.Size.Height)
+			{
+				this.Size = new Size(Config.SizeX, Config.SizeY);
+			}
+		}
+
+		private void HyperLinkClicked(object sender, HyperlinkClickedEventArgs e)
+		{
+			e.Handled = true;
+			Uri uri = new Uri(e.Url);
+			Process.Start(new ProcessStartInfo(uri.ToString()) { UseShellExecute = true });
 		}
 
 		private void InitializeListView()
@@ -328,6 +388,8 @@ namespace QuickBox
 						var subMenuItem1 = new ToolStripMenuItem($"Launch with {emulator.Title}");
 						subMenuItem1.Click += (senderemu, eemu) =>
 						{
+							if(vlcControl != null && vlcControl.Visible) { vlcControl.Stop(); }
+							gameLaunched = true;
 							PluginHelper.LaunchBoxMainViewModel.PlayGame(game, null, emulator, null);
 						};
 						MenuItem_LaunchWith.DropDownItems.Add(subMenuItem1);
@@ -342,6 +404,8 @@ namespace QuickBox
 							var subMenuItem1 = new ToolStripMenuItem($"Play Version {addApp.Name}");
 							subMenuItem1.Click += (senderemu, eemu) =>
 							{
+								if (vlcControl != null && vlcControl.Visible) { vlcControl.Stop(); }
+								gameLaunched = true;
 								PluginHelper.LaunchBoxMainViewModel.PlayGame(game, addApp, DefaultEmulator, null);
 							};
 							MenuItem_PlayVersion.DropDownItems.Add(subMenuItem1);
@@ -364,6 +428,8 @@ namespace QuickBox
 					.Where(emulator => emulator.GetAllEmulatorPlatforms()
 						.Where(ep => ep.Platform == game.Platform && ep.IsDefault).Count() > 0).FirstOrDefault();
 
+				if (vlcControl != null && vlcControl.Visible) { vlcControl.Stop(); }
+				gameLaunched = true;
 				PluginHelper.LaunchBoxMainViewModel.PlayGame(game, null, Emulator, null);
 			}
 		}
@@ -500,7 +566,9 @@ namespace QuickBox
 					.Where(emulator => emulator.GetAllEmulatorPlatforms()
 						.Where(ep => ep.Platform == game.Platform && ep.IsDefault).Count() > 0).FirstOrDefault();
 
-                PluginHelper.LaunchBoxMainViewModel.PlayGame(game, null, Emulator, null);
+				if (vlcControl != null && vlcControl.Visible) { vlcControl.Stop(); }
+				gameLaunched = true;
+				PluginHelper.LaunchBoxMainViewModel.PlayGame(game, null, Emulator, null);
 
 			}
 		}
@@ -547,7 +615,20 @@ namespace QuickBox
 					lbl_genre.Text = "Genre : " + game.GenresString;
 					lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
 					lbl_desc.Text = game.Notes;
-
+					if (Config.showExtraInfo)
+					{
+						treeListView2.Scrollable = false;
+						MessageBox.Show(treeListView2.Width.ToString());
+						olvColumnValue.Width = 290;
+						//olvColumnValue.FillsFreeSpace = true;
+						
+						if (!treeListView2.Visible) treeListView2.Visible = true;
+						treeListView2.SetObjects(GameToNameValueList(game));
+					}
+					else
+					{
+						treeListView2.Visible = false;
+					}
 				}
 				else
 				{
@@ -612,14 +693,14 @@ namespace QuickBox
 
 			//flowLayoutPanel1.Visible = true;
 
-			if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo)
+			if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
 			{
 				try
 				{
-					if (Config.volumeVideo == 0 && !vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
-					if (Config.volumeVideo > 0 && vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+					//if (Config.volumeVideo == 0 && !vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+					//if (Config.volumeVideo > 0 && vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
 
-					//if(vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+					//if (Config.muteVideo) vlcControl.Audio.Volume = 0;
 					vlcControl.Visible = true;
 					vlcControl.SetMedia(new FileInfo(selectedVideoPath));
 					vlcControl.Play();
@@ -1073,7 +1154,7 @@ namespace QuickBox
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			timer_hideLb.Enabled = true;
-			ChangeLaunchboxVisibility(true);
+			//ChangeLaunchboxVisibility(true);
 		}
 
 		private void treeListView1_SelectedIndexChanged(object sender, EventArgs e)
@@ -1124,7 +1205,10 @@ namespace QuickBox
 
 		private void button1_Click_1(object sender, EventArgs e)
 		{
-			ChangeLaunchboxVisibility(!launchboxHidden);
+			Config.LaunchboxWasShow = true;
+			ChangeLaunchboxVisibility(false);
+			this.Close();
+
 
 		}
 
@@ -1184,10 +1268,15 @@ namespace QuickBox
 					//MessageBox.Show($"Handle de fenêtre : {hWnd}, Nom de la fenêtre : {windowText}");
 					if (windowText.ToString() == "LaunchBox")
 					{
+						Thread.Sleep(100);
 						ShowWindow(hWnd, SW_HIDE);
 						timer_hideLb.Enabled = false;
 						launchboxHidden = true;
+						Thread.Sleep(100);
 						this.Activate();
+						this.TopMost = true;
+						Thread.Sleep(100);
+						this.TopMost = false;
 					}
 				}
 				return true;
@@ -1196,7 +1285,20 @@ namespace QuickBox
 
 		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			if (launchboxHidden) PluginHelper.LaunchBoxMainViewModel.Close();
+			if (launchboxHidden)
+			{
+				if (Config.LaunchboxWasShow)
+				{
+					//Invoke(new MethodInvoker(PluginHelper.LaunchBoxMainViewModel.Close));
+					//PluginHelper.LaunchBoxMainViewModel.Close();
+					ChangeLaunchboxVisibility(false);
+				}
+				else
+				{
+					Process.GetCurrentProcess().Kill();
+
+				}
+			}
 
 		}
 
@@ -1207,6 +1309,7 @@ namespace QuickBox
 			{
 				fs.Write(dataToSave, 0, dataToSave.Length);
 			}
+			Config.SaveSize(this.Size);
 
 		}
 
@@ -1271,6 +1374,113 @@ namespace QuickBox
 				vlcControl.Stop();
 				vlcControl.Visible = false;
 			}
+			treeListView2.Visible = false;
+		}
+
+		public List<NameValue> GameToNameValueList(IGame game)
+		{
+			var Result = new List<NameValue>();
+			Result.Add(new NameValue("Title", game.Title));
+			Result.Add(new NameValue("Developer", game.Developer));
+			Result.Add(new NameValue("Publisher", game.Publisher));
+			Result.Add(new NameValue("ApplicationPath", game.ApplicationPath));
+
+			int i = 0;
+			foreach(var add in game.GetAllAdditionalApplications())
+			{
+				try
+				{
+					i++;
+					string fileName = Path.GetFileName(add.ApplicationPath);
+					Result.Add(new NameValue($"AddApp{i}", fileName));
+				}
+				catch { }
+				
+			}
+
+			foreach(var custom in game.GetAllCustomFields())
+			{
+				Result.Add(new NameValue(custom.Name, custom.Value));
+			}
+
+
+
+			string ReleaseDate = string.Empty;
+			if (game.ReleaseDate != null) {
+				DateTime dateTime = (DateTime)game.ReleaseDate;
+				ReleaseDate = dateTime.ToShortDateString();
+			}
+			Result.Add(new NameValue("ReleaseDate", ReleaseDate));
+			Result.Add(new NameValue("ReleaseYear", game.ReleaseYear == null ? string.Empty : game.ReleaseYear.ToString()));
+			Result.Add(new NameValue("Rating", game.Rating));
+			//Result.Add(new NameValue("Genres", game.GenresString));
+
+			i = 0;
+			foreach (var genre in game.Genres)
+			{
+				i++;
+				Result.Add(new NameValue($"Genre {i}", genre));
+			}
+
+			Result.Add(new NameValue("Series", game.Series));
+			Result.Add(new NameValue("Region", game.Region));
+			Result.Add(new NameValue("PlayMode", game.PlayMode));
+			Result.Add(new NameValue("Version", game.Version));
+			Result.Add(new NameValue("Status", game.Status));
+			Result.Add(new NameValue("Source", game.Source));
+			Result.Add(new NameValue("DateAdded", game.DateAdded.ToShortTimeString()));
+			Result.Add(new NameValue("DateModified", game.DateModified.ToShortTimeString()));
+			Result.Add(new NameValue("PlayCount", game.PlayCount.ToString()));
+			Result.Add(new NameValue("Favorite", game.Favorite ? "Yes" : "No"));
+			Result.Add(new NameValue("Completed", game.Completed ? "Yes" : "No"));
+			Result.Add(new NameValue("Broken", game.Broken ? "Yes" : "No"));
+			Result.Add(new NameValue("Portable", game.Portable ? "Yes" : "No"));
+			Result.Add(new NameValue("Hide", game.Hide ? "Yes" : "No"));
+			Result.Add(new NameValue("StarRating", game.StarRating.ToString()));
+			Result.Add(new NameValue("CommunityStarRating", Math.Round((float)game.CommunityStarRating, 2).ToString()));
+			Result.Add(new NameValue("CommunityStarRatingTotalVotes", game.CommunityStarRatingTotalVotes.ToString()));
+
+			i = 0;
+			foreach (IAlternateName name in game.GetAllAlternateNames())
+			{
+				i++;
+				Result.Add(new NameValue($"AltName{i}", name.Name));
+			}
+
+			Result.Add(new NameValue("WikipediaUrl", game.WikipediaUrl.ToString()));
+			Result.Add(new NameValue("VideoUrl", game.VideoUrl));
+			
+			string gameInstalled = string.Empty;
+			if (game.Installed != null) gameInstalled = (bool)game.Installed ? "Yes" : "No";
+			Result.Add(new NameValue("Installed", gameInstalled));
+
+			string launchBoxDbId = string.Empty;
+			if (game.LaunchBoxDbId != null) launchBoxDbId = game.LaunchBoxDbId.ToString();
+			Result.Add(new NameValue("LaunchBoxDbId", launchBoxDbId));
+
+			TimeSpan temps = TimeSpan.FromSeconds(game.PlayTime);
+			Result.Add(new NameValue("PlayTime", temps.ToString(@"hh\:mm\:ss")));
+
+			return Result;
+		}
+
+		private void treeListView2_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			treeListView2.Scrollable = true;
+			//olvColumnValue.FillsFreeSpace = false;
+			olvColumnValue.Width = 1000;
+		}
+
+		private void treeListView2_IsHyperlink(object sender, IsHyperlinkEventArgs e)
+		{
+			if (!e.Url.StartsWith("http")) e.Url = null;
+		}
+
+		private void treeListView2_Leave(object sender, EventArgs e)
+		{
+			treeListView2.Refresh();
+			olvColumnValue.Width = 290;
+			treeListView2.RebuildColumns();
 		}
 	}
 	public static class StringExtensions
@@ -1281,6 +1491,19 @@ namespace QuickBox
 		}
 	}
 
+
+
+	public struct NameValue
+	{
+		public string Name;
+		public string Value;
+
+		public NameValue(string name, string value)
+		{
+			Name = name;
+			Value = value;
+		}
+	}
 
 
 	public class CacheImg
