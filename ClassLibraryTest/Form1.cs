@@ -208,11 +208,22 @@ namespace QuickBox
 			};
 
 			treeListView1.Roots = rootPlatforms;
+			fastObjectListView1.AfterSorting += CleanCache;
 
-			if(Config.SizeX >= this.Size.Width && Config.SizeY >= this.Size.Height)
+			if (Config.SizeX >= this.Size.Width && Config.SizeY >= this.Size.Height)
 			{
 				this.Size = new Size(Config.SizeX, Config.SizeY);
 			}
+		}
+
+		private void CleanCache(object sender, EventArgs e)
+		{
+			try
+			{
+				if (isGeneratingCache) forceCacheReset = true;
+				cache.Clear();
+			}
+			catch { }
 		}
 
 		private void PlatformLoadTimer_Tick(object sender, EventArgs e)
