@@ -53,8 +53,11 @@ namespace QuickBox
 		private Dictionary<string, Image> preloadPlatformIcons = new Dictionary<string, Image>();
 
 		private System.Windows.Forms.Timer imageLoadTimer = new System.Windows.Forms.Timer();
+		private System.Windows.Forms.Timer platformLoadTimer = new System.Windows.Forms.Timer();
+
 		private IGame selectedGame = null;
 		private int selectedIndex = -1;
+		private IPlatform selectedPlatform = null;
 		/*
 		private string selectedClearLogoPath = "";
 		private string selectedVideoPath = "";
@@ -164,6 +167,10 @@ namespace QuickBox
 			imageLoadTimer.Interval = Config.delayShow;
 			imageLoadTimer.Tick += ImageLoadTimer_Tick;
 
+			platformLoadTimer.Interval = Config.delayShow;
+			platformLoadTimer.Tick += PlatformLoadTimer_Tick;
+
+
 			textBox1.TextChanged += TextBox1_TextChanged;
 			
 
@@ -193,6 +200,15 @@ namespace QuickBox
 			{
 				this.Size = new Size(Config.SizeX, Config.SizeY);
 			}
+		}
+
+		private void PlatformLoadTimer_Tick(object sender, EventArgs e)
+		{
+			if(selectedPlatform != null)
+			{
+				Task.Run(() => PlateformDisplay(selectedPlatform, true));
+			}
+			platformLoadTimer.Stop();
 		}
 
 		private void HyperLinkClicked(object sender, HyperlinkClickedEventArgs e)
@@ -575,6 +591,7 @@ namespace QuickBox
 
 		private void fastObjectListView1_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			platformLoadTimer.Stop();
 			imageLoadTimer.Stop();
 			
 			if (fastObjectListView1.SelectedIndex >= 0)
@@ -1159,10 +1176,16 @@ namespace QuickBox
 
 		private void treeListView1_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			ClearDisplay();
+			
 			if (isGeneratingCache) forceCacheReset = true;
 			cache.Clear();
 			//IPlatform platform = (IPlatform)this.treeListView1.SelectedObject;
+			imageLoadTimer.Stop();
+			platformLoadTimer.Stop();
+
+			//ClearDisplay();
+			PlateformDisplay((IPlatform)this.treeListView1.SelectedObject,false);
+			
 			var objectPlatform = this.treeListView1.SelectedObject;
 			if (objectPlatform is IPlaylist)
 			{
@@ -1200,6 +1223,107 @@ namespace QuickBox
 				}
 				this.fastObjectListView1.SetObjects(element.GetAllGames(true,true));
 				return;
+			}
+		}
+
+		private void PlateformDisplay(IPlatform platform, bool showMedia = false)
+		{
+			if (showMedia == false)
+			{
+				imageLoadTimer.Stop();
+				platformLoadTimer.Stop();
+				ClearDisplay();
+			}
+			
+			bool found = false;
+			string selectedClearLogoPath = string.Empty;
+			string selectedVideoPath = string.Empty;
+			string selectedBackgroundPath = string.Empty;
+			string selectedMainImage = string.Empty;
+			if (!found && platform is IPlaylist)
+			{
+				var item = (IPlaylist)platform;
+				label_gameTitle.Text = item.Name;
+				label_platform.Text = "";
+				lbl_desc.Text = item.Notes;
+				if (showMedia)
+				{
+					selectedClearLogoPath = item.ClearLogoImagePath;
+					selectedVideoPath = item.GetPlatformVideoPath();
+					selectedBackgroundPath = item.BackgroundImagePath;
+					selectedMainImage = item.DeviceImagePath;
+				}
+			}
+			if (!found && platform is IPlatformCategory)
+			{
+				var item = (IPlatformCategory)platform;
+				label_gameTitle.Text = item.Name;
+				label_platform.Text = "";
+				lbl_desc.Text = item.Notes;
+				if (showMedia)
+				{
+					selectedClearLogoPath = item.ClearLogoImagePath;
+					selectedVideoPath = item.GetPlatformVideoPath();
+					selectedBackgroundPath = item.BackgroundImagePath;
+					selectedMainImage = item.DeviceImagePath;
+				}
+			}
+			if(!found && platform is IPlatform)
+			{
+				var item = (IPlatform)platform;
+				label_gameTitle.Text = item.Name;
+				label_platform.Text = "";
+				lbl_desc.Text = item.Notes;
+				if (showMedia)
+				{
+					selectedClearLogoPath = item.ClearLogoImagePath;
+					selectedVideoPath = item.GetPlatformVideoPath();
+					selectedBackgroundPath = item.BackgroundImagePath;
+					selectedMainImage = item.DeviceImagePath;
+				}
+			}
+			pictureBox1.Visible = true;
+			vlcControl.Visible = false;
+			pictureBox_gameImage.Visible = false;
+
+			if (!showMedia)
+			{
+				pictureBox1.Image = null;
+				selectedPlatform = platform;
+				platformLoadTimer.Start();
+				return;
+			}
+			//flowLayoutPanel1.Visible = true;
+			pictureBox1.Image = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, label_gameTitle.Text, pictureBox1.Size);
+
+			if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
+			{
+				try
+				{
+					vlcControl.Visible = true;
+					vlcControl.SetMedia(new FileInfo(selectedVideoPath));
+					vlcControl.Play();
+				}
+				catch (Exception ex)
+				{
+					vlcControl.Stop();
+				}
+			}
+			else vlcControl.Stop();
+
+			if (!vlcControl.Visible && !string.IsNullOrEmpty(selectedMainImage))
+			{
+				try
+				{
+					pictureBox_gameImage.Visible = true;
+					Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
+					pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+					
+				}
+				catch
+				{
+					pictureBox_gameImage.Image = null;
+				}
 			}
 		}
 
