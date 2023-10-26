@@ -11,6 +11,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Policy;
@@ -596,6 +597,10 @@ namespace QuickBox
 			
 			if (fastObjectListView1.SelectedIndex >= 0)
 			{
+				selectedGame = (IGame)this.fastObjectListView1.SelectedObject;
+				selectedIndex = this.fastObjectListView1.SelectedIndex;
+				GameDisplay(false);
+				/*
 				if (Config.instantShow)
 				{
 					if (!tempLoad)
@@ -656,8 +661,10 @@ namespace QuickBox
 
 
 				imageLoadTimer.Start();
+				*/
 			}
-			
+
+
 		}
 
 		private Image ResizeImage(Image img, Size size)
@@ -673,6 +680,13 @@ namespace QuickBox
 
 		private void ImageLoadTimer_Tick(object sender, EventArgs e)
 		{
+			if (selectedGame != null)
+			{
+				Task.Run(() => GameDisplay(true,pictureBox1.Size,pictureBox_gameImage.Size));
+				if (Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
+			}
+			imageLoadTimer.Stop();
+			/*
 			tempLoad = false;
 
 			IGame game = selectedGame;
@@ -747,13 +761,11 @@ namespace QuickBox
 				}
 			}
 			AddPictureBoxesToFlowLayoutPanel(selectedImgList);
-
-
 			if(Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
-
-
-			// Arrêtez le timer
 			imageLoadTimer.Stop();
+			*/
+
+
 		}
 
 		private void GenerateCache()
@@ -866,7 +878,7 @@ namespace QuickBox
 			isGeneratingCache = false;
 		}
 
-		private void AddPictureBoxesToFlowLayoutPanel(ImageDetails[] selectedImgList)
+		private void AddPictureBoxesToFlowLayoutPanel(ImageDetails[] selectedImgList, Dictionary<string, Image> preCalculateImg)
 		{
 			if(flowLayoutPanelThumbs.Visible == false) flowLayoutPanelThumbs.Visible = true;
 			// Supprimez tous les contrôles existants dans le FlowLayoutPanel
@@ -878,6 +890,11 @@ namespace QuickBox
 			// Pour chaque image dans votre tableau selectedImgList
 			foreach (ImageDetails imgDetails in selectedImgList)
 			{
+				if (!preCalculateImg.ContainsKey(imgDetails.FilePath)) continue;
+
+				Image ImageThumb = preCalculateImg[imgDetails.FilePath];
+				if(ImageThumb == null) continue;
+				/*
 				if (string.IsNullOrEmpty(imgDetails.FilePath) || !File.Exists(imgDetails.FilePath)) continue;
 
 				Image ImageThumb = null;
@@ -891,6 +908,7 @@ namespace QuickBox
 					continue;
 				}
 				if (ImageThumb == null) continue;
+				*/
 
 				// Créez une nouvelle instance de PictureBox
 				PictureBox pictureBox = new PictureBox();
@@ -946,7 +964,7 @@ namespace QuickBox
 			}
 		}
 
-		public  Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
+		public Image GenerateLogo(string logoPath, string backgroundPath, string GameName, Size taille)
 		{
 			if (!string.IsNullOrEmpty(backgroundPath) && backgroundPath.Contains(@"\Platforms\")) backgroundPath = "";
 
@@ -986,7 +1004,7 @@ namespace QuickBox
 				logo = GenerateTextImage(GameName, SizeLogo.Width, SizeLogo.Height);
 			}
 
-			Bitmap newImage = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+			Bitmap newImage = new Bitmap(taille.Width, taille.Height);
 			using (Graphics g = Graphics.FromImage(newImage))
 			{
 				// Créez une matrice de couleur de transparence (ici, 50% de transparence)
@@ -1226,6 +1244,225 @@ namespace QuickBox
 			}
 		}
 
+		private void GameDisplay(bool showMedia = false, Size LogoSize = new Size(), Size MainSize = new Size())
+		{
+			IGame game = selectedGame;
+			int index = selectedIndex;
+			if (showMedia == false)
+			{
+				if (Config.instantShow)
+				{
+					if (!tempLoad)
+					{
+						if (vlcControl.Visible)
+						{
+							vlcControl.Stop();
+							vlcControl.Visible = false;
+						}
+						pictureBox_gameImage.Visible = true;
+						if (cache.ContainsKey(index))
+						{
+							pictureBox1.Image = cache[index].Logo;
+							pictureBox_gameImage.Image = cache[index].Background;
+						}
+						else
+						{
+							pictureBox1.Image = LoadingImg;
+							pictureBox_gameImage.Image = LoadingImg;
+						}
+					}
+					label_gameTitle.Text = game.Title;
+					label_platform.Text = game.Platform;
+
+					lbl_developer.Text = "Developer : " + game.Developer;
+					lbl_publisher.Text = "Publisher : " + game.Publisher;
+					lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
+					lbl_genre.Text = "Genre : " + game.GenresString;
+					lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+					lbl_desc.Text = game.Notes;
+					if (Config.showExtraInfo)
+					{
+						treeListView2.Scrollable = false;
+						olvColumnValue.Width = 290;
+						if (!treeListView2.Visible) treeListView2.Visible = true;
+						treeListView2.SetObjects(GameToNameValueList(game));
+					}
+					else
+					{
+						treeListView2.Visible = false;
+					}
+				}
+				imageLoadTimer.Start();
+
+			}
+			else
+			{
+				tempLoad = false;
+
+
+
+				string selectedClearLogoPath = game.ClearLogoImagePath;
+				string selectedVideoPath = game.GetVideoPath();
+				string selectedBackgroundPath = game.BackgroundImagePath;
+				string selectedMainImage = game.Box3DImagePath;
+
+				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.FrontImagePath;
+				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.CartFrontImagePath;
+				if (string.IsNullOrEmpty(selectedMainImage)) selectedMainImage = game.Cart3DImagePath;
+				ImageDetails[] selectedImgList = game.GetAllImagesWithDetails();
+				if (string.IsNullOrEmpty(selectedMainImage) && selectedImgList.Any()) selectedMainImage = selectedImgList.FirstOrDefault().FilePath;
+
+				Image ImgLogo = null;
+				Image ImgMain = null;
+				string videoPath = "";
+
+				if (!cache.ContainsKey(index))
+				{
+					ImgLogo = GenerateLogo(selectedClearLogoPath, selectedBackgroundPath, game.Title, LogoSize);
+				}
+				else
+				{
+					ImgLogo = cache[index].Logo;
+				}
+
+				if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
+				{
+					if (File.Exists(selectedVideoPath))
+					{
+						videoPath = selectedVideoPath;
+					}
+				}
+				if(string.IsNullOrEmpty(videoPath))
+				{
+					try
+					{
+						if (!cache.ContainsKey(index))
+						{
+							Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
+							ImgMain = ResizeImageBest(originalImage, MainSize);
+						}
+						else
+						{
+							ImgMain = cache[index].Background;
+						}
+					}
+					catch { }
+				}
+
+				Dictionary<string,Image> preRenderedThumbs = new Dictionary<string,Image>();
+				foreach (ImageDetails imgDetails in selectedImgList) 
+				{
+					if (preRenderedThumbs.ContainsKey(imgDetails.FilePath)) continue;
+					if (string.IsNullOrEmpty(imgDetails.FilePath) || !File.Exists(imgDetails.FilePath)) continue;
+					Image ImageThumb = null;
+					try
+					{
+						Image originalImage = System.Drawing.Image.FromFile(imgDetails.FilePath);
+						ImageThumb = ResizeImageBest(originalImage, new Size(77, 77));
+					}
+					catch
+					{
+						ImageThumb = null;
+					}
+					preRenderedThumbs.Add(imgDetails.FilePath, ImageThumb);
+				}
+
+				MethodInvoker methodInvokerDelegate = delegate ()
+				{
+					label_gameTitle.Text = game.Title;
+					label_platform.Text = game.Platform;
+					lbl_developer.Text = "Developer : " + game.Developer;
+					lbl_publisher.Text = "Publisher : " + game.Publisher;
+					lbl_file.Text = "File : " + Path.GetFileName(game.ApplicationPath);
+					lbl_genre.Text = "Genre : " + game.GenresString;
+					lbl_rlzdate.Text = "Release Date : " + game.ReleaseYear != null ? game.ReleaseYear.ToString() : string.Empty;
+					lbl_desc.Text = game.Notes;
+
+					pictureBox1.Image = ImgLogo;
+					pictureBox1.Visible = true;
+					vlcControl.Visible = false;
+					pictureBox_gameImage.Visible = false;
+					if (string.IsNullOrEmpty(videoPath))
+					{
+						pictureBox_gameImage.Image = ImgMain;
+						pictureBox_gameImage.Visible = true;
+					}
+					else
+					{
+						try
+						{
+							vlcControl.Visible = true;
+							vlcControl.SetMedia(new FileInfo(videoPath));
+							vlcControl.Play();
+						}
+						catch (Exception ex)
+						{
+							vlcControl.Stop();
+						}
+					}
+					AddPictureBoxesToFlowLayoutPanel(selectedImgList, preRenderedThumbs);
+
+				};
+
+				//This will be true if Current thread is not UI thread.
+				if (this.InvokeRequired)
+					this.Invoke(methodInvokerDelegate);
+				else
+					methodInvokerDelegate();
+
+				/*
+
+
+				pictureBox1.Visible = true;
+				vlcControl.Visible = false;
+				pictureBox_gameImage.Visible = false;
+				flowLayoutPanelThumbs.Visible = true;
+
+				//flowLayoutPanel1.Visible = true;
+
+				if (!string.IsNullOrEmpty(selectedVideoPath) && Config.showVideo && !gameLaunched)
+				{
+					try
+					{
+						//if (Config.volumeVideo == 0 && !vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+						//if (Config.volumeVideo > 0 && vlcControl.Audio.IsMute) vlcControl.Audio.ToggleMute();
+
+						//if (Config.muteVideo) vlcControl.Audio.Volume = 0;
+						vlcControl.Visible = true;
+						vlcControl.SetMedia(new FileInfo(selectedVideoPath));
+						vlcControl.Play();
+					}
+					catch (Exception ex)
+					{
+						vlcControl.Stop();
+						//MessageBox.Show(ex.Message);
+					}
+				}
+				else vlcControl.Stop();
+
+				if (!vlcControl.Visible && !string.IsNullOrEmpty(selectedMainImage))
+				{
+					try
+					{
+						pictureBox_gameImage.Visible = true;
+						if (!cache.ContainsKey(index) || !Config.instantShow)
+						{
+							Image originalImage = System.Drawing.Image.FromFile(selectedMainImage);
+							pictureBox_gameImage.Image = ResizeImageBest(originalImage, pictureBox_gameImage.Size);
+						}
+					}
+					catch
+					{
+						pictureBox_gameImage.Image = null;
+					}
+				}
+				AddPictureBoxesToFlowLayoutPanel(selectedImgList);
+				*/
+				//if (Config.tailleCache > 0 && !isGeneratingCache) Task.Run(() => GenerateCache());
+				imageLoadTimer.Stop();
+			}
+
+		}
 		private void PlateformDisplay(IPlatform platform, bool showMedia = false)
 		{
 			if (showMedia == false)
