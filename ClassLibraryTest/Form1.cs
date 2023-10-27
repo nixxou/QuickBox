@@ -709,7 +709,7 @@ namespace QuickBox
 			{
 				
 				Task.Run(() => GameDisplay(true,pictureBox1.Size,pictureBox_gameImage.Size));
-				if (Config.tailleCache > 0)
+				if (Config.tailleCache > 0 && Config.instantShow)
 				{
 					if (isGeneratingCache)
 					{
@@ -1043,10 +1043,10 @@ namespace QuickBox
 			}
 			if(background == null)
 			{
-				disposeBackground = false;
+				//disposeBackground = false;
 				//background = System.Drawing.Image.FromFile(Path.Combine(Config.GetPluginPath(), "background.jpg"));
 				//background = ResizeImage(background, taille);
-				background = BackgroundEmpty;
+				background = BackgroundEmpty.Clone() as Image;
 			}
 
 			Image logo = null;
